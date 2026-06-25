@@ -1,1 +1,8 @@
 Flask
+pymysql
+python-dotenv
+flask-limiter
+pyotp
+qrcode
+email-validator
+pytest
