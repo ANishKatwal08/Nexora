@@ -39,3 +39,18 @@ def get_user_by_username(username):
             return cursor.fetchone()
     finally:
         connection.close()
+def get_user_by_identifier(identifier):
+    """Return the user whose email, username, or phone matches, or None."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT * FROM users
+                WHERE email = %s OR username = %s OR phone = %s
+                """,
+                (identifier, identifier, identifier),
+            )
+            return cursor.fetchone()
+    finally:
+        connection.close()

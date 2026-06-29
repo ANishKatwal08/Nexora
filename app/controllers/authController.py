@@ -1,5 +1,5 @@
-from flask import render_template, request, redirect, url_for, flash
-from werkzeug.security import generate_password_hash
+from flask import render_template, request, redirect, url_for, flash, session
+from werkzeug.security import generate_password_hash, check_password_hash
 from app.repository import user_repo
 
 
@@ -49,3 +49,40 @@ def register():
 
     flash("Account created. You can now log in.", "success")
     return redirect(url_for("auth.login"))
+
+def login():
+    if request.method == "GET":
+        return render_template("auth/login.html")
+
+    # POST, read the form
+    identifier = request.form.get("identifier", "").strip()
+    password = request.form.get("password", "")
+
+    if not identifier or not password:
+        flash("Please enter your login details and password.", "danger")
+        return render_template("auth/login.html")
+
+    user = user_repo.get_user_by_identifier(identifier)
+
+    # Same message whether the user is missing or the password is wrong
+    if not user or not check_password_hash(user["password_hash"], password):
+        flash("Invalid login details.", "danger")
+        return render_template("auth/login.html")
+
+    if not user["is_active"]:
+        flash("This account has been deactivated.", "danger")
+        return render_template("auth/login.html")
+
+    # Start the session
+    session["user_id"] = user["id"]
+    session["user_name"] = user["name"]
+    session["user_role"] = user["role"]
+
+    flash("Welcome back, " + user["name"] + ".", "success")
+    return redirect(url_for("home"))
+
+
+def logout():
+    session.clear()
+    flash("You have been logged out.", "success")
+    return redirect(url_for("home"))
