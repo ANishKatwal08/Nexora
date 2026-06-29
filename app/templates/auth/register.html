@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Sign up for Nexora{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="auth-card">
+        <h1 class="auth-title">Create your account</h1>
+        <p class="auth-sub">Join Nexora as a learner or a mentor.</p>
+
+        <form method="POST" action="{{ url_for('auth.register') }}">
+            <div class="field">
+                <label for="name">Full name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="field">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="field">
+                <label for="phone">Phone <span class="optional">(optional)</span></label>
+                <input type="text" id="phone" name="phone">
+            </div>
+
+            <div class="field">
+                <label for="role">I want to join as</label>
+                <select id="role" name="role">
+                    <option value="learner">A learner</option>
+                    <option value="mentor">A mentor</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="field">
+                <label for="confirm">Confirm password</label>
+                <input type="password" id="confirm" name="confirm" required>
+            </div>
+
+            <button type="submit" class="btn auth-btn">Create account</button>
+        </form>
+
+        <p class="auth-foot">Already have an account? <a href="#">Log in</a></p>
+    </div>
+</div>
+{% endblock %}

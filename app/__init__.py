@@ -7,8 +7,11 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    # Ensure database tables exist on startup
     create_tables()
+
+    # Register blueprints
+    from app.routes.authRoutes import bp as auth_bp
+    app.register_blueprint(auth_bp)
 
     @app.route("/")
     def home():
