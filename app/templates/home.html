@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Nexora — Learn any skill from a mentor{% endblock %}
+{% block title %}Nexora, learn any skill from a mentor{% endblock %}
 
 {% block content %}
 <section class="hero-banner" style="background-image: url('{{ url_for('static', filename='img/hero.jpg') }}');">
@@ -28,9 +28,8 @@
 </section>
 
 <section class="categories container">
-    <h2 class="categories-title">Explore skills by category</h2>
     <div class="category-grid">
-        <a href="#" class="category-card">
+        <a href="#" class="category-card reveal">
             <span class="category-icon">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="16 18 22 12 16 6"></polyline>
@@ -40,7 +39,7 @@
             <span class="category-name">Programming &amp; Tech</span>
         </a>
 
-        <a href="#" class="category-card">
+        <a href="#" class="category-card reveal">
             <span class="category-icon">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
@@ -49,7 +48,7 @@
             <span class="category-name">Design &amp; Creative</span>
         </a>
 
-        <a href="#" class="category-card">
+        <a href="#" class="category-card reveal">
             <span class="category-icon">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
@@ -59,7 +58,7 @@
             <span class="category-name">Business &amp; Marketing</span>
         </a>
 
-        <a href="#" class="category-card">
+        <a href="#" class="category-card reveal">
             <span class="category-icon">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
@@ -70,7 +69,7 @@
             <span class="category-name">Languages</span>
         </a>
 
-        <a href="#" class="category-card">
+        <a href="#" class="category-card reveal">
             <span class="category-icon">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M9 18V5l12-2v13"></path>
@@ -81,7 +80,7 @@
             <span class="category-name">Music &amp; Audio</span>
         </a>
 
-        <a href="#" class="category-card">
+        <a href="#" class="category-card reveal">
             <span class="category-icon">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
@@ -92,4 +91,78 @@
         </a>
     </div>
 </section>
+
+<section class="stats">
+    <div class="stats-inner container">
+        <div class="stat reveal">
+            <div class="stat-title">Every skill</div>
+            <div class="stat-text">Mentors across tech, design, business, and more</div>
+        </div>
+        <div class="stat reveal">
+            <div class="stat-title">Solo or group</div>
+            <div class="stat-text">Book one on one or join a group session</div>
+        </div>
+        <div class="stat reveal">
+            <div class="stat-title">Your pace</div>
+            <div class="stat-text">Schedule sessions around your own time</div>
+        </div>
+        <div class="stat reveal">
+            <div class="stat-title">Real feedback</div>
+            <div class="stat-text">Honest reviews after every session</div>
+        </div>
+    </div>
+</section>
+
+<section class="showcase container">
+    <h2 class="showcase-title">Services</h2>
+    <div class="showcase-grid">
+
+        <a href="#" class="tile reveal" style="background-image: url('{{ url_for('static', filename='img/tile-mentor.jpg') }}');">
+            <div class="tile-content">
+                <h3 class="tile-heading">Become a mentor</h3>
+                <p class="tile-sub">Share your skills and earn while you teach.</p>
+                <span class="tile-btn">Get started</span>
+            </div>
+        </a>
+
+        <a href="#" class="tile reveal" style="background-image: url('{{ url_for('static', filename='img/tile-book.jpg') }}');">
+            <div class="tile-content">
+                <h3 class="tile-heading">Book a session</h3>
+                <p class="tile-sub">Find a mentor and learn at your own pace.</p>
+                <span class="tile-btn">Browse sessions</span>
+            </div>
+        </a>
+
+        <a href="#" class="tile reveal" style="background-image: url('{{ url_for('static', filename='img/tile-group.jpg') }}');">
+            <div class="tile-content">
+                <h3 class="tile-heading">Join group sessions</h3>
+                <p class="tile-sub">Learn together with others who share your goals.</p>
+                <span class="tile-btn">Explore groups</span>
+            </div>
+        </a>
+
+        <a href="#" class="tile reveal" style="background-image: url('{{ url_for('static', filename='img/tile-progress.jpg') }}');">
+            <div class="tile-content">
+                <h3 class="tile-heading">Track your progress</h3>
+                <p class="tile-sub">See your bookings, feedback, and growth in one place.</p>
+                <span class="tile-btn">View dashboard</span>
+            </div>
+        </a>
+
+    </div>
+</section>
+
+<section class="cta reveal">
+    <div class="cta-inner container">
+        <h2 class="cta-heading">Ready to start learning</h2>
+        <p class="cta-text">Join Nexora today and connect with mentors who can help you grow.</p>
+        <a href="#" class="btn cta-btn">Sign up free</a>
+    </div>
+</section>
+
+{% include "partials/footer.html" %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/reveal.js') }}"></script>
 {% endblock %}
