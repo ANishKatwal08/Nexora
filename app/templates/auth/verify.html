@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% set hide_nav = true %}
+
+{% block title %}Verify your login{% endblock %}
+
+{% block content %}
+<div class="auth-split">
+    <div class="auth-visual" style="background-image: url('{{ url_for('static', filename='img/auth.jpg') }}');">
+        <div class="auth-visual-overlay"></div>
+        <div class="auth-visual-text">
+            <p class="auth-tagline">One more step to keep your account safe</p>
+            <h2 class="auth-visual-heading">Check<br>your email</h2>
+        </div>
+    </div>
+
+    <div class="auth-form-side">
+        <div class="auth-form-top">
+            <a href="{{ url_for('home') }}" class="auth-logo">Nexora</a>
+            <span class="auth-top-link"><a href="{{ url_for('auth.login') }}">Back to login</a></span>
+        </div>
+
+        <div class="auth-form-main">
+            <h1 class="auth-heading">Enter code</h1>
+            <p class="auth-sub-text">We emailed you a 6 digit code. Enter it below to finish signing in.</p>
+
+            <form method="POST" action="{{ url_for('auth.verify') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="field">
+                    <input type="text" id="code" name="code" placeholder="6 digit code" inputmode="numeric" maxlength="6" required autofocus>
+                </div>
+
+                <button type="submit" class="btn auth-submit">Verify and sign in</button>
+            </form>
+        </div>
+
+        <div class="auth-form-bottom">
+            <span>Copyright 2026 Nexora</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

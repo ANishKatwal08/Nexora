@@ -37,6 +37,19 @@ def create_tables():
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                 )
             """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS auth_codes (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    user_id INT NOT NULL,
+                    code VARCHAR(10) NOT NULL,
+                    purpose VARCHAR(20) NOT NULL DEFAULT 'login',
+                    expires_at DATETIME NOT NULL,
+                    used BOOLEAN DEFAULT FALSE,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                )
+            """)
         connection.commit()
     finally:
         connection.close()

@@ -18,3 +18,6 @@ class Config:
     # Session cookie security settings
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
+
+    MAIL_SENDER = os.getenv("MAIL_SENDER")
+    MAIL_APP_PASSWORD = os.getenv("MAIL_APP_PASSWORD")

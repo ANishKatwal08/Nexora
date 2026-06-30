@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.repository import user_repo
+from app.email_service import send_email
 
 
 def register():
@@ -54,7 +55,6 @@ def login():
     if request.method == "GET":
         return render_template("auth/login.html")
 
-    # POST, read the form
     identifier = request.form.get("identifier", "").strip()
     password = request.form.get("password", "")
 
@@ -64,7 +64,6 @@ def login():
 
     user = user_repo.get_user_by_identifier(identifier)
 
-    # Same message whether the user is missing or the password is wrong
     if not user or not check_password_hash(user["password_hash"], password):
         flash("Invalid login details.", "danger")
         return render_template("auth/login.html")
@@ -73,7 +72,38 @@ def login():
         flash("This account has been deactivated.", "danger")
         return render_template("auth/login.html")
 
-    # Start the session
+    # Password is correct. Generate a code, email it, and hold the login pending.
+    code = user_repo.create_login_code(user["id"])
+    send_email(
+        user["email"],
+        "Your Nexora login code",
+        "Your Nexora verification code is " + code + ". It expires in 10 minutes.",
+    )
+
+    session["pending_user_id"] = user["id"]
+
+    flash("We sent a verification code to your email.", "success")
+    return redirect(url_for("auth.verify"))
+
+
+def verify():
+    # Must have a pending login to be here
+    if "pending_user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    if request.method == "GET":
+        return render_template("auth/verify.html")
+
+    code = request.form.get("code", "").strip()
+    user_id = session["pending_user_id"]
+
+    if not user_repo.verify_login_code(user_id, code):
+        flash("Invalid or expired code.", "danger")
+        return render_template("auth/verify.html")
+
+    # Code is good. Promote the pending login to a real session.
+    user = user_repo.get_user_by_id(user_id)
+    session.pop("pending_user_id", None)
     session["user_id"] = user["id"]
     session["user_name"] = user["name"]
     session["user_role"] = user["role"]

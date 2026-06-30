@@ -140,6 +140,11 @@ a:hover { text-decoration: underline; }
 .nav-links a.btn { color: var(--accent-text); }
 .nav-links a.btn:hover { color: var(--accent-text); }
 
+.nav-user {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
 /* Hero banner */
 .hero-banner {
   position: relative;
@@ -579,4 +584,11 @@ a:hover { text-decoration: underline; }
 @media (max-width: 860px) {
   .auth-visual { display: none; }
   .auth-form-side { padding: 30px 24px; }
+}
+
+.auth-sub-text {
+  color: var(--text-muted);
+  font-size: 15px;
+  margin-bottom: 24px;
+  margin-top: -16px;
 }
