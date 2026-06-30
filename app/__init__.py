@@ -32,6 +32,9 @@ def create_app():
     from app.routes.authRoutes import bp as auth_bp
     app.register_blueprint(auth_bp)
 
+    from app.routes.dashboardRoutes import bp as dashboard_bp
+    app.register_blueprint(dashboard_bp)
+
     @app.route("/")
     def home():
         return render_template("home.html")

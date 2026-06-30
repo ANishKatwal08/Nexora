@@ -109,7 +109,7 @@ def verify():
     session["user_role"] = user["role"]
 
     flash("Welcome back, " + user["name"] + ".", "success")
-    return redirect(url_for("home"))
+    return redirect(url_for("dashboard.dashboard"))
 
 
 def logout():
