@@ -1,28 +1,53 @@
 {% extends "base.html" %}
+{% set hide_nav = true %}
 
 {% block title %}Log in to Nexora{% endblock %}
 
 {% block content %}
-<div class="auth-wrap">
-    <div class="auth-card">
-        <h1 class="auth-title">Welcome back</h1>
-        <p class="auth-sub">Log in to your Nexora account.</p>
+<div class="auth-split">
+    <div class="auth-visual" style="background-image: url('{{ url_for('static', filename='img/auth.jpg') }}');">
+        <div class="auth-visual-overlay"></div>
+        <div class="auth-visual-text">
+            <p class="auth-tagline">Learn any skill from people who get it</p>
+            <h2 class="auth-visual-heading">Welcome<br>back</h2>
+        </div>
+    </div>
 
-        <form method="POST" action="{{ url_for('auth.login') }}">
-            <div class="field">
-                <label for="identifier">Email, username, or phone</label>
-                <input type="text" id="identifier" name="identifier" required>
-            </div>
+    <div class="auth-form-side">
+        <div class="auth-form-top">
+            <a href="{{ url_for('home') }}" class="auth-logo">Nexora</a>
+            <span class="auth-top-link">New here? <a href="{{ url_for('auth.register') }}">Sign up</a></span>
+        </div>
 
-            <div class="field">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
+        <div class="auth-form-main">
+            <h1 class="auth-heading">Sign in</h1>
 
-            <button type="submit" class="btn auth-btn">Log in</button>
-        </form>
+            <form method="POST" action="{{ url_for('auth.login') }}">
+                <div class="field">
+                    <input type="text" id="identifier" name="identifier" placeholder="Email, username, or phone" required>
+                </div>
 
-        <p class="auth-foot">New to Nexora? <a href="{{ url_for('auth.register') }}">Create an account</a></p>
+                <div class="field field-password">
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                    <button type="button" class="toggle-password" data-target="password" aria-label="Show password">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
+
+                <button type="submit" class="btn auth-submit">Sign in</button>
+            </form>
+        </div>
+
+        <div class="auth-form-bottom">
+            <span>Copyright 2026 Nexora</span>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}

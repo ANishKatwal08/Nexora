@@ -9,7 +9,9 @@
 </head>
 <body>
 
-    {% include "partials/nav.html" %}
+    {% if not hide_nav %}
+        {% include "partials/nav.html" %}
+    {% endif %}
 
     <main>
         {% with messages = get_flashed_messages(with_categories=true) %}
