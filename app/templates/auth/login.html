@@ -23,6 +23,7 @@
             <h1 class="auth-heading">Sign in</h1>
 
             <form method="POST" action="{{ url_for('auth.login') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="field">
                     <input type="text" id="identifier" name="identifier" placeholder="Email, username, or phone" required>
                 </div>
