@@ -1,32 +1,27 @@
-{% extends "base.html" %}
+{% extends "dash_base.html" %}
+{% set active = 'dashboard' %}
 
 {% block title %}Your dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
 
-{% block content %}
-<section class="dash container">
-    <div class="dash-head">
-        <h1>Welcome back, {{ name }}</h1>
-        <p>Here is what is happening with your learning.</p>
+{% block dash_content %}
+<div class="dash-stats">
+    <div class="dash-stat">
+        <div class="dash-stat-num">0</div>
+        <div class="dash-stat-label">Booked sessions</div>
     </div>
+    <div class="dash-stat">
+        <div class="dash-stat-num">0</div>
+        <div class="dash-stat-label">Completed</div>
+    </div>
+    <div class="dash-stat">
+        <div class="dash-stat-num">0</div>
+        <div class="dash-stat-label">Mentors</div>
+    </div>
+</div>
 
-    <div class="dash-stats">
-        <div class="dash-stat">
-            <div class="dash-stat-num">0</div>
-            <div class="dash-stat-label">Booked sessions</div>
-        </div>
-        <div class="dash-stat">
-            <div class="dash-stat-num">0</div>
-            <div class="dash-stat-label">Completed</div>
-        </div>
-        <div class="dash-stat">
-            <div class="dash-stat-num">0</div>
-            <div class="dash-stat-label">Mentors</div>
-        </div>
-    </div>
-
-    <div class="dash-panel">
-        <h2>Your upcoming sessions</h2>
-        <p class="dash-empty">You have no sessions booked yet. Browse sessions to get started.</p>
-    </div>
-</section>
+<div class="dash-panel">
+    <h2>Your upcoming sessions</h2>
+    <p class="dash-empty">You have no sessions booked yet.</p>
+</div>
 {% endblock %}

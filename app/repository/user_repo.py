@@ -116,3 +116,41 @@ def get_user_by_id(user_id):
             return cursor.fetchone()
     finally:
         connection.close()
+
+def get_user_by_id(user_id):
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT id, name, email, role, bio, avatar_url FROM users WHERE id = %s",
+                (user_id,),
+            )
+            return cursor.fetchone()
+    finally:
+        connection.close()
+
+
+def update_user_profile(user_id, name, bio):
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE users SET name = %s, bio = %s WHERE id = %s",
+                (name, bio, user_id),
+            )
+        connection.commit()
+    finally:
+        connection.close()
+
+
+def update_user_avatar(user_id, filename):
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE users SET avatar_url = %s WHERE id = %s",
+                (filename, user_id),
+            )
+        connection.commit()
+    finally:
+        connection.close()

@@ -1,0 +1,45 @@
+{% extends "dash_base.html" %}
+{% set active = 'profile' %}
+
+{% block title %}Your profile{% endblock %}
+{% block page_title %}Profile{% endblock %}
+
+{% block dash_content %}
+<div class="dash-panel profile-panel">
+    <form method="POST" action="{{ url_for('profile.profile_update') }}" enctype="multipart/form-data">
+
+        <div class="profile-photo-row">
+            <div class="profile-photo">
+                {% if user.avatar_url %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ user.avatar_url) }}" alt="Profile photo">
+                {% else %}
+                    <span>{{ user.name[0]|upper }}</span>
+                {% endif %}
+            </div>
+            <div>
+                <label class="field-label" for="photo">Profile photo</label>
+                <input type="file" id="photo" name="photo" accept=".png,.jpg,.jpeg,.webp">
+                <p class="field-hint">png, jpg, or webp, up to 2 MB.</p>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="field-label" for="name">Name</label>
+            <input type="text" id="name" name="name" value="{{ user.name }}" required>
+        </div>
+
+        <div class="field">
+            <label class="field-label" for="email">Email</label>
+            <input type="text" id="email" value="{{ user.email }}" disabled>
+            <p class="field-hint">Email cannot be changed here.</p>
+        </div>
+
+        <div class="field">
+            <label class="field-label" for="bio">Bio</label>
+            <textarea id="bio" name="bio" rows="4" placeholder="Tell people a little about yourself">{{ user.bio or "" }}</textarea>
+        </div>
+
+        <button type="submit" class="btn">Save changes</button>
+    </form>
+</div>
+{% endblock %}

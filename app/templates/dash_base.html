@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Nexora{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="dash-body">
+
+    <aside class="sidebar">
+        <div class="sidebar-brand">Nex<span>ora</span></div>
+
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('dashboard.dashboard') }}"
+               class="{{ 'active' if active == 'dashboard' }}">Dashboard</a>
+
+            {% if session.get('user_role') == 'mentor' %}
+                <a href="#" class="{{ 'active' if active == 'sessions' }}">My sessions</a>
+                <a href="#" class="{{ 'active' if active == 'mentor_profile' }}">Mentor profile</a>
+            {% else %}
+                <a href="#" class="{{ 'active' if active == 'browse' }}">Browse sessions</a>
+                <a href="#" class="{{ 'active' if active == 'bookings' }}">My bookings</a>
+            {% endif %}
+
+            <a href="{{ url_for('profile.profile') }}" class="{{ 'active' if active == 'profile' }}">Profile</a>
+            <a href="#" class="{{ 'active' if active == 'settings' }}">Settings</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="{{ url_for('auth.logout') }}">Log out</a>
+        </div>
+    </aside>
+
+    <main class="dash-main">
+        <header class="dash-topbar">
+            <div>
+                <p class="dash-hello">Welcome back, {{ session.get('user_name') }}</p>
+                <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+            </div>
+            <div class="dash-user">
+                <div class="dash-avatar">
+                {% if session.get('user_avatar') %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ session.get('user_avatar')) }}" alt="">
+                {% else %}
+                    {{ session.get('user_name', '?')[0]|upper }}
+                {% endif %}
+            </div>
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        {% block dash_content %}{% endblock %}
+    </main>
+
+</body>
+</html>
