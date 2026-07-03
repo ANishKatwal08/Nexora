@@ -2,6 +2,7 @@ from flask import Flask, render_template, session, request, abort
 from config import Config
 from app.database import create_tables
 import secrets
+import os
 
 
 def create_app():
@@ -9,6 +10,9 @@ def create_app():
     app.config.from_object(Config)
 
     create_tables()
+
+    # Make sure the uploads folder exists
+    os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
     # Make a CSRF token available, creating one per session if needed
     def get_csrf_token():
@@ -35,9 +39,9 @@ def create_app():
     from app.routes.dashboardRoutes import bp as dashboard_bp
     app.register_blueprint(dashboard_bp)
 
-    from app.routes.dashboardRoutes import bp as dashboard_bp
-    app.register_blueprint(dashboard_bp)
-    
+    from app.routes.profileRoutes import bp as profile_bp
+    app.register_blueprint(profile_bp)
+
     @app.route("/")
     def home():
         return render_template("home.html")

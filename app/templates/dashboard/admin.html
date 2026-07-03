@@ -1,32 +1,27 @@
-{% extends "base.html" %}
+{% extends "dash_base.html" %}
+{% set active = 'dashboard' %}
 
 {% block title %}Admin dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
 
-{% block content %}
-<section class="dash container">
-    <div class="dash-head">
-        <h1>Admin dashboard</h1>
-        <p>Platform overview and management.</p>
+{% block dash_content %}
+<div class="dash-stats">
+    <div class="dash-stat">
+        <div class="dash-stat-num">0</div>
+        <div class="dash-stat-label">Total users</div>
     </div>
+    <div class="dash-stat">
+        <div class="dash-stat-num">0</div>
+        <div class="dash-stat-label">Total sessions</div>
+    </div>
+    <div class="dash-stat">
+        <div class="dash-stat-num">0</div>
+        <div class="dash-stat-label">Total bookings</div>
+    </div>
+</div>
 
-    <div class="dash-stats">
-        <div class="dash-stat">
-            <div class="dash-stat-num">0</div>
-            <div class="dash-stat-label">Total users</div>
-        </div>
-        <div class="dash-stat">
-            <div class="dash-stat-num">0</div>
-            <div class="dash-stat-label">Total sessions</div>
-        </div>
-        <div class="dash-stat">
-            <div class="dash-stat-num">0</div>
-            <div class="dash-stat-label">Total bookings</div>
-        </div>
-    </div>
-
-    <div class="dash-panel">
-        <h2>Manage users</h2>
-        <p class="dash-empty">User management coming soon.</p>
-    </div>
-</section>
+<div class="dash-panel">
+    <h2>Manage users</h2>
+    <p class="dash-empty">User management coming soon.</p>
+</div>
 {% endblock %}
