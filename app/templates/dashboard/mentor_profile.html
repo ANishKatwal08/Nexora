@@ -1,0 +1,61 @@
+{% extends "dash_base.html" %}
+{% set active = 'mentor_profile' %}
+
+{% block title %}Mentor profile{% endblock %}
+{% block page_title %}Mentor profile{% endblock %}
+
+{% block dash_content %}
+
+<div class="dash-panel" style="margin-bottom: 20px;">
+    <h2>Your profession</h2>
+    <p class="dash-empty" style="margin-bottom: 16px;">This shows on your profile so learners know your background.</p>
+    <form method="POST" action="{{ url_for('mentor.update_mentor_profession') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="field" style="display: flex; gap: 12px;">
+            <input type="text" name="profession" value="{{ user.profession or '' }}"
+                   placeholder="For example, Senior Web Developer" style="flex: 1;">
+            <button type="submit" class="btn">Save</button>
+        </div>
+    </form>
+</div>
+
+<div class="dash-panel" style="margin-bottom: 20px;">
+    <h2>Skills you teach</h2>
+    {% if my_skills %}
+        <div class="skill-tags">
+            {% for skill in my_skills %}
+                <span class="skill-tag">
+                    {{ skill.name }}
+                    <form method="POST" action="{{ url_for('mentor.remove_skill') }}" style="display: inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="skill_id" value="{{ skill.id }}">
+                        <button type="submit" class="skill-remove" aria-label="Remove skill">&times;</button>
+                    </form>
+                </span>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="dash-empty">You have not added any skills yet. Add some below so learners can find you.</p>
+    {% endif %}
+</div>
+
+<div class="dash-panel">
+    <h2>Add a skill</h2>
+    {% if available %}
+        <form method="POST" action="{{ url_for('mentor.add_skill') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="field" style="display: flex; gap: 12px;">
+                <select name="skill_id" style="flex: 1;">
+                    {% for skill in available %}
+                        <option value="{{ skill.id }}">{{ skill.name }} ({{ skill.category }})</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn">Add</button>
+            </div>
+        </form>
+    {% else %}
+        <p class="dash-empty">You have added all available skills.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

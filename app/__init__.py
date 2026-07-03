@@ -1,6 +1,6 @@
 from flask import Flask, render_template, session, request, abort
 from config import Config
-from app.database import create_tables
+from app.database import create_tables, seed_skills
 import secrets
 import os
 
@@ -10,6 +10,7 @@ def create_app():
     app.config.from_object(Config)
 
     create_tables()
+    seed_skills()
 
     # Make sure the uploads folder exists
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
@@ -41,6 +42,9 @@ def create_app():
 
     from app.routes.profileRoutes import bp as profile_bp
     app.register_blueprint(profile_bp)
+
+    from app.routes.mentorRoutes import bp as mentor_bp
+    app.register_blueprint(mentor_bp)
 
     @app.route("/")
     def home():

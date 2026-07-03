@@ -154,3 +154,78 @@ def update_user_avatar(user_id, filename):
         connection.commit()
     finally:
         connection.close()
+
+def get_all_skills():
+    """Return every skill in the master list, ordered by category then name."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM skills ORDER BY category, name")
+            return cursor.fetchall()
+    finally:
+        connection.close()
+
+
+def get_mentor_skills(mentor_id):
+    """Return the skills a mentor teaches."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT s.id, s.name, s.category
+                FROM mentor_skills ms
+                JOIN skills s ON ms.skill_id = s.id
+                WHERE ms.mentor_id = %s
+                ORDER BY s.name
+                """,
+                (mentor_id,),
+            )
+            return cursor.fetchall()
+    finally:
+        connection.close()
+
+
+def add_mentor_skill(mentor_id, skill_id):
+    """Link a skill to a mentor. Ignores duplicates."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT IGNORE INTO mentor_skills (mentor_id, skill_id)
+                VALUES (%s, %s)
+                """,
+                (mentor_id, skill_id),
+            )
+        connection.commit()
+    finally:
+        connection.close()
+
+
+def remove_mentor_skill(mentor_id, skill_id):
+    """Unlink a skill from a mentor."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "DELETE FROM mentor_skills WHERE mentor_id = %s AND skill_id = %s",
+                (mentor_id, skill_id),
+            )
+        connection.commit()
+    finally:
+        connection.close()
+
+
+def update_profession(user_id, profession):
+    """Set a mentor's profession title."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE users SET profession = %s WHERE id = %s",
+                (profession, user_id),
+            )
+        connection.commit()
+    finally:
+        connection.close()

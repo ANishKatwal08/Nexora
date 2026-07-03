@@ -28,6 +28,7 @@ def create_tables():
                     password_hash VARCHAR(255) NOT NULL,
                     role VARCHAR(20) NOT NULL DEFAULT 'learner',
                     bio TEXT,
+                    profession VARCHAR(120),
                     avatar_url VARCHAR(255),
                     theme VARCHAR(10) DEFAULT 'light',
                     is_active BOOLEAN DEFAULT TRUE,
@@ -50,6 +51,57 @@ def create_tables():
                     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
                 )
             """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS skills (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    name VARCHAR(80) UNIQUE NOT NULL,
+                    category VARCHAR(60),
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS mentor_skills (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    mentor_id INT NOT NULL,
+                    skill_id INT NOT NULL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (mentor_id) REFERENCES users(id) ON DELETE CASCADE,
+                    FOREIGN KEY (skill_id) REFERENCES skills(id) ON DELETE CASCADE,
+                    UNIQUE KEY unique_mentor_skill (mentor_id, skill_id)
+                )
+            """)
+        connection.commit()
+    finally:
+        connection.close()
+
+
+def seed_skills():
+    """Add a starter set of skills if the table is empty."""
+    starter = [
+        ("Python", "Programming & Tech"),
+        ("JavaScript", "Programming & Tech"),
+        ("Web Development", "Programming & Tech"),
+        ("Data Science", "Data & AI"),
+        ("Machine Learning", "Data & AI"),
+        ("UI Design", "Design & Creative"),
+        ("Graphic Design", "Design & Creative"),
+        ("Public Speaking", "Business & Marketing"),
+        ("Digital Marketing", "Business & Marketing"),
+        ("Spanish", "Languages"),
+        ("English", "Languages"),
+        ("Music Production", "Music & Audio"),
+    ]
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT COUNT(*) AS count FROM skills")
+            if cursor.fetchone()["count"] == 0:
+                cursor.executemany(
+                    "INSERT INTO skills (name, category) VALUES (%s, %s)",
+                    starter,
+                )
         connection.commit()
     finally:
         connection.close()
