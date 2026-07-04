@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Nexora{% endblock %}</title>
+    <script>
+        (function () {
+            const saved = localStorage.getItem("theme");
+            if (saved === "dark") {
+                document.documentElement.setAttribute("data-theme", "dark");
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% block css %}{% endblock %}
 </head>
@@ -28,5 +36,6 @@
     </main>
 
     {% block scripts %}{% endblock %}
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 </body>
 </html>

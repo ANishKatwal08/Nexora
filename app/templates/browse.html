@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Find a mentor{% endblock %}
+
+{% block content %}
+<div class="browse-hero">
+    <div class="container">
+        <h1>Find your mentor</h1>
+        <p>Browse {{ mentors|length }} mentors across every skill and connect with someone who can teach you.</p>
+    </div>
+</div>
+
+<section class="browse container">
+
+    <form id="filter-form" class="filter-bar" method="GET" action="{{ url_for('browse.browse') }}">
+
+        <div class="filter-pill-wrap">
+            <button type="button" class="filter-pill" data-panel="category-panel">
+                <span class="pill-icon">+</span> Category
+                {% if selected_categories %}<span class="pill-count">{{ selected_categories|length }}</span>{% endif %}
+            </button>
+            <div class="filter-panel" id="category-panel">
+                <div class="filter-panel-body">
+                    {% for cat in categories %}
+                        <label class="check-row">
+                            <input type="checkbox" name="category" value="{{ cat }}"
+                                   {% if cat in selected_categories %}checked{% endif %}>
+                            <span>{{ cat }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn filter-apply">Apply</button>
+            </div>
+        </div>
+
+        <div class="filter-pill-wrap">
+            <button type="button" class="filter-pill" data-panel="skill-panel">
+                <span class="pill-icon">+</span> Skill
+                {% if selected_skill_ids %}<span class="pill-count">{{ selected_skill_ids|length }}</span>{% endif %}
+            </button>
+            <div class="filter-panel" id="skill-panel">
+                <div class="filter-panel-body scroll">
+                    {% for skill in all_skills %}
+                        <label class="check-row">
+                            <input type="checkbox" name="skill" value="{{ skill.id }}"
+                                   {% if skill.id in selected_skill_ids %}checked{% endif %}>
+                            <span>{{ skill.name }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn filter-apply">Apply</button>
+            </div>
+        </div>
+
+        <div class="filter-search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" name="q" value="{{ search }}" placeholder="Search by name" onkeydown="if(event.key==='Enter'){this.form.submit();}">
+        </div>
+
+        <select name="sort" onchange="this.form.submit()" class="sort-select">
+            <option value="rating" {% if sort == 'rating' %}selected{% endif %}>Top rated</option>
+            <option value="name" {% if sort == 'name' %}selected{% endif %}>Name A to Z</option>
+        </select>
+
+        {% if selected_skill_ids or selected_categories or search %}
+            <a href="{{ url_for('browse.browse') }}" class="filter-clear">Clear all</a>
+        {% endif %}
+    </form>
+
+    {% if mentors %}
+        <div class="mentor-grid">
+            {% for mentor in mentors %}
+                <div class="mentor-card">
+                    <div class="mentor-card-banner avatar-color-{{ mentor.name|length % 8 }}"></div>
+                    <div class="mentor-card-body">
+                        <div class="mentor-avatar avatar-color-{{ mentor.name|length % 8 }}">
+                            {% if mentor.avatar_url %}
+                                <img src="{{ url_for('static', filename='uploads/' ~ mentor.avatar_url) }}" alt="{{ mentor.name }}">
+                            {% else %}
+                                <span>{{ mentor.name[0]|upper }}</span>
+                            {% endif %}
+                        </div>
+
+                        <h3 class="mentor-name">{{ mentor.name }}</h3>
+                        <p class="mentor-profession">{{ mentor.profession or "Mentor" }}</p>
+                        <div class="mentor-rating">
+                            <span class="star">&#9733;</span> {{ "%.1f"|format(mentor.rating) }}
+                        </div>
+
+                        {% if mentor.bio %}
+                            <p class="mentor-bio">{{ mentor.bio }}</p>
+                        {% endif %}
+
+                        {% if mentor.skills %}
+                            <div class="mentor-skills">
+                                {% for skill in mentor.skills[:3] %}
+                                    <span class="mentor-skill-tag">{{ skill.name }}</span>
+                                {% endfor %}
+                                {% if mentor.skills|length > 3 %}
+                                    <span class="mentor-skill-tag more">+{{ mentor.skills|length - 3 }}</span>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        <a href="#" class="btn mentor-request-btn">Request a session</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="browse-empty">
+            <p>No mentors match your filters. Try removing some.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/filters.js') }}"></script>
+{% endblock %}

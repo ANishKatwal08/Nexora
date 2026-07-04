@@ -229,3 +229,60 @@ def update_profession(user_id, profession):
         connection.commit()
     finally:
         connection.close()
+
+def find_mentors_by_skill(skill_id):
+    """Return all mentors who teach a given skill."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT u.id, u.name, u.username, u.profession, u.bio, u.avatar_url
+                FROM users u
+                JOIN mentor_skills ms ON u.id = ms.mentor_id
+                WHERE ms.skill_id = %s
+                  AND u.role = 'mentor'
+                  AND u.is_active = TRUE
+                ORDER BY u.name
+                """,
+                (skill_id,),
+            )
+            return cursor.fetchall()
+    finally:
+        connection.close()
+
+
+def get_all_mentors():
+    """Return all active mentors, for browsing without a filter."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT id, name, username, profession, bio, avatar_url
+                FROM users
+                WHERE role = 'mentor' AND is_active = TRUE
+                ORDER BY name
+                """
+            )
+            return cursor.fetchall()
+    finally:
+        connection.close()
+
+def get_all_mentors(sort="rating"):
+    """Return all active mentors, sorted by rating or name."""
+    order = "rating DESC, name ASC" if sort == "rating" else "name ASC"
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                f"""
+                SELECT id, name, username, profession, bio, avatar_url, rating
+                FROM users
+                WHERE role = 'mentor' AND is_active = TRUE
+                ORDER BY {order}
+                """
+            )
+            return cursor.fetchall()
+    finally:
+        connection.close()
