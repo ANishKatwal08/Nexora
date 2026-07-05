@@ -16,11 +16,11 @@
                class="{{ 'active' if active == 'dashboard' }}">Dashboard</a>
 
             {% if session.get('user_role') == 'mentor' %}
-                <a href="#" class="{{ 'active' if active == 'sessions' }}">My sessions</a>
-                <a href="#" class="{{ 'active' if active == 'mentor_profile' }}">Mentor profile</a>
+                <a href="{{ url_for('session.mentor_requests') }}" class="{{ 'active' if active == 'requests' }}">Requests</a>
+                <a href="{{ url_for('mentor.mentor_profile') }}" class="{{ 'active' if active == 'mentor_profile' }}">Mentor profile</a>
             {% else %}
-                <a href="#" class="{{ 'active' if active == 'browse' }}">Browse sessions</a>
-                <a href="#" class="{{ 'active' if active == 'bookings' }}">My bookings</a>
+                <a href="{{ url_for('browse.browse') }}" class="{{ 'active' if active == 'browse' }}">Browse mentors</a>
+                <a href="#" class="{{ 'active' if active == 'bookings' }}">My requests</a>
             {% endif %}
 
             <a href="{{ url_for('profile.profile') }}" class="{{ 'active' if active == 'profile' }}">Profile</a>

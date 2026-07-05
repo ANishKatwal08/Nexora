@@ -24,9 +24,12 @@
     <main>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                <div class="container">
+                <div class="toast-wrap">
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                        <div class="toast toast-{{ category }}">
+                            <span>{{ message }}</span>
+                            <button type="button" class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+                        </div>
                     {% endfor %}
                 </div>
             {% endif %}
