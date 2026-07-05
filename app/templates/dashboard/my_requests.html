@@ -1,0 +1,35 @@
+{% extends "dash_base.html" %}
+{% set active = 'bookings' %}
+
+{% block title %}My requests{% endblock %}
+{% block page_title %}My requests{% endblock %}
+
+{% block dash_content %}
+
+{% if requests %}
+    <div class="req-list">
+        {% for req in requests %}
+            <div class="req-card">
+                <div class="req-main">
+                    <div class="req-info">
+                        <h3>{{ req.mentor_name }}</h3>
+                        <p class="req-skill">{{ req.skill_name or "General session" }}</p>
+                        {% if req.note %}
+                            <p class="req-note">{{ req.note }}</p>
+                        {% endif %}
+                        {% if req.scheduled_at %}
+                            <p class="req-time">Scheduled for {{ req.scheduled_at }}</p>
+                        {% endif %}
+                    </div>
+                    <span class="req-status status-{{ req.status }}">{{ req.status|capitalize }}</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="dash-panel">
+        <p class="dash-empty">You have not requested any sessions yet. Browse mentors to get started.</p>
+    </div>
+{% endif %}
+
+{% endblock %}

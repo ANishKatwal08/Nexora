@@ -20,7 +20,7 @@
                 <a href="{{ url_for('mentor.mentor_profile') }}" class="{{ 'active' if active == 'mentor_profile' }}">Mentor profile</a>
             {% else %}
                 <a href="{{ url_for('browse.browse') }}" class="{{ 'active' if active == 'browse' }}">Browse mentors</a>
-                <a href="#" class="{{ 'active' if active == 'bookings' }}">My requests</a>
+                <a href="{{ url_for('session.my_requests') }}" class="{{ 'active' if active == 'bookings' }}">My requests</a>
             {% endif %}
 
             <a href="{{ url_for('profile.profile') }}" class="{{ 'active' if active == 'profile' }}">Profile</a>

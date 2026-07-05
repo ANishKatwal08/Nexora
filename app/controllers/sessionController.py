@@ -53,3 +53,10 @@ def respond_request(request_id):
         flash("Session marked as completed.", "success")
 
     return redirect(url_for("session.mentor_requests"))
+@login_required
+def my_requests():
+    if session.get("user_role") != "learner":
+        return redirect(url_for("dashboard.dashboard"))
+    learner_id = session["user_id"]
+    requests_list = user_repo.get_requests_for_learner(learner_id)
+    return render_template("dashboard/my_requests.html", requests=requests_list)
