@@ -286,3 +286,86 @@ def get_all_mentors(sort="rating"):
             return cursor.fetchall()
     finally:
         connection.close()
+def create_session_request(learner_id, mentor_id, skill_id, note):
+    """Create a new session request from a learner to a mentor."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO session_requests (learner_id, mentor_id, skill_id, note)
+                VALUES (%s, %s, %s, %s)
+                """,
+                (learner_id, mentor_id, skill_id, note),
+            )
+        connection.commit()
+        return cursor.lastrowid
+    finally:
+        connection.close()
+
+
+def get_requests_for_learner(learner_id):
+    """Return all session requests made by a learner, with mentor and skill names."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT sr.*, u.name AS mentor_name, s.name AS skill_name
+                FROM session_requests sr
+                JOIN users u ON sr.mentor_id = u.id
+                LEFT JOIN skills s ON sr.skill_id = s.id
+                WHERE sr.learner_id = %s
+                ORDER BY sr.created_at DESC
+                """,
+                (learner_id,),
+            )
+            return cursor.fetchall()
+    finally:
+        connection.close()
+
+
+def get_requests_for_mentor(mentor_id):
+    """Return all session requests sent to a mentor, with learner and skill names."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT sr.*, u.name AS learner_name, s.name AS skill_name
+                FROM session_requests sr
+                JOIN users u ON sr.learner_id = u.id
+                LEFT JOIN skills s ON sr.skill_id = s.id
+                WHERE sr.mentor_id = %s
+                ORDER BY sr.created_at DESC
+                """,
+                (mentor_id,),
+            )
+            return cursor.fetchall()
+    finally:
+        connection.close()
+
+
+def get_request_by_id(request_id):
+    """Return a single session request."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM session_requests WHERE id = %s", (request_id,))
+            return cursor.fetchone()
+    finally:
+        connection.close()
+
+
+def update_request_status(request_id, status, scheduled_at=None):
+    """Update a request's status and optionally its scheduled time."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE session_requests SET status = %s, scheduled_at = %s WHERE id = %s",
+                (status, scheduled_at, request_id),
+            )
+        connection.commit()
+    finally:
+        connection.close()

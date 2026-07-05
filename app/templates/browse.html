@@ -105,7 +105,16 @@
                             </div>
                         {% endif %}
 
-                        <a href="#" class="btn mentor-request-btn">Request a session</a>
+                        {% if session.get('user_id') and session.get('user_role') == 'learner' %}
+                            <form method="POST" action="{{ url_for('session.request_session', mentor_id=mentor.id) }}" class="request-form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn mentor-request-btn">Request a session</button>
+                            </form>
+                        {% elif session.get('user_id') %}
+                            <span class="mentor-request-note">Log in as a learner to request</span>
+                        {% else %}
+                            <a href="{{ url_for('auth.login') }}" class="btn mentor-request-btn">Log in to request</a>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}

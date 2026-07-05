@@ -44,6 +44,9 @@ def create_app():
     from app.routes.dashboardRoutes import bp as dashboard_bp
     app.register_blueprint(dashboard_bp)
 
+    from app.routes.sessionRoutes import bp as session_bp
+    app.register_blueprint(session_bp)
+
     from app.routes.profileRoutes import bp as profile_bp
     app.register_blueprint(profile_bp)
 
