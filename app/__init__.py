@@ -65,6 +65,9 @@ def create_app():
     from app.routes.profileRoutes import bp as profile_bp
     app.register_blueprint(profile_bp)
 
+    from app.routes.settingsRoutes import bp as settings_bp
+    app.register_blueprint(settings_bp)
+
     from app.routes.mentorRoutes import bp as mentor_bp
     app.register_blueprint(mentor_bp)
 

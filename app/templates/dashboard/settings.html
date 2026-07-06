@@ -1,0 +1,49 @@
+{% extends "dash_base.html" %}
+{% set active = 'settings' %}
+
+{% block title %}Settings{% endblock %}
+{% block page_title %}Settings{% endblock %}
+
+{% block dash_content %}
+<div class="card profile-card">
+    <div class="card-header">
+        <h3>Change password</h3>
+    </div>
+    <form method="POST" action="{{ url_for('settings.change_password') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="field">
+            <label class="field-label" for="current_password">Current password</label>
+            <input type="password" id="current_password" name="current_password" required>
+        </div>
+        <div class="field">
+            <label class="field-label" for="new_password">New password</label>
+            <input type="password" id="new_password" name="new_password" required>
+            <p class="field-hint">At least 8 characters.</p>
+        </div>
+        <div class="field">
+            <label class="field-label" for="confirm_password">Confirm new password</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+        </div>
+        <button type="submit" class="btn-dash">Update password</button>
+    </form>
+</div>
+
+<div class="card profile-card">
+    <div class="card-header">
+        <h3>Delete account</h3>
+    </div>
+    <p class="dash-empty" style="margin-bottom:16px;">
+        This permanently deletes your account and cannot be undone.
+        Type <strong>DELETE</strong> to confirm.
+    </p>
+    <form method="POST" action="{{ url_for('settings.delete_account') }}"
+          onsubmit="return confirm('Are you sure? This cannot be undone.');">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="field">
+            <input type="text" name="confirm_delete" placeholder="Type DELETE here">
+        </div>
+        <button type="submit" class="btn-dash btn-danger">Delete my account</button>
+    </form>
+</div>
+{% endblock %}

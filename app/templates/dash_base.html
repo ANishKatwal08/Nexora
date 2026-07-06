@@ -54,7 +54,7 @@
                    class="menu-item {{ 'active' if active == 'profile' }}">
                     <i class="fa-solid fa-user"></i> Profile
                 </a>
-                <a href="#" class="menu-item {{ 'active' if active == 'settings' }}">
+                <a href="{{ url_for('settings.settings') }}" class="menu-item {{ 'active' if active == 'settings' }}">
                     <i class="fa-solid fa-gear"></i> Settings
                 </a>
             </nav>

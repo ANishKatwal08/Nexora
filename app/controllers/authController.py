@@ -107,6 +107,7 @@ def verify():
     session["user_id"] = user["id"]
     session["user_name"] = user["name"]
     session["user_role"] = user["role"]
+    session["user_avatar"] = user.get("avatar_url")
 
     flash("Welcome back, " + user["name"] + ".", "success")
     return redirect(url_for("dashboard.dashboard"))

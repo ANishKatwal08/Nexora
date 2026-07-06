@@ -369,3 +369,39 @@ def update_request_status(request_id, status, scheduled_at=None):
         connection.commit()
     finally:
         connection.close()
+
+def get_password_hash(user_id):
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT password_hash FROM users WHERE id = %s",
+                (user_id,),
+            )
+            row = cursor.fetchone()
+            return row["password_hash"] if row else None
+    finally:
+        connection.close()
+
+
+def update_password(user_id, new_hash):
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE users SET password_hash = %s WHERE id = %s",
+                (new_hash, user_id),
+            )
+        connection.commit()
+    finally:
+        connection.close()
+
+
+def delete_user(user_id):
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("DELETE FROM users WHERE id = %s", (user_id,))
+        connection.commit()
+    finally:
+        connection.close()
