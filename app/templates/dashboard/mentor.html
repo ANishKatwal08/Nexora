@@ -1,27 +1,38 @@
 {% extends "dash_base.html" %}
 {% set active = 'dashboard' %}
 
-{% block title %}Mentor dashboard{% endblock %}
+{% block title %}Your dashboard{% endblock %}
 {% block page_title %}Dashboard{% endblock %}
 
 {% block dash_content %}
-<div class="dash-stats">
-    <div class="dash-stat">
-        <div class="dash-stat-num">0</div>
-        <div class="dash-stat-label">Sessions hosted</div>
+<div class="stats-row">
+    <div class="card kpi-card">
+        <div class="kpi-icon icon-teal"><i class="fa-solid fa-calendar-days"></i></div>
+        <div>
+            <span class="kpi-label">Sessions hosted</span>
+            <span class="kpi-value">0</span>
+        </div>
     </div>
-    <div class="dash-stat">
-        <div class="dash-stat-num">0</div>
-        <div class="dash-stat-label">Bookings</div>
+    <div class="card kpi-card">
+        <div class="kpi-icon icon-pink"><i class="fa-solid fa-bookmark"></i></div>
+        <div>
+            <span class="kpi-label">Bookings</span>
+            <span class="kpi-value">0</span>
+        </div>
     </div>
-    <div class="dash-stat">
-        <div class="dash-stat-num">0.0</div>
-        <div class="dash-stat-label">Average rating</div>
+    <div class="card kpi-card">
+        <div class="kpi-icon icon-purple"><i class="fa-solid fa-star"></i></div>
+        <div>
+            <span class="kpi-label">Average rating</span>
+            <span class="kpi-value">–</span>
+        </div>
     </div>
 </div>
 
-<div class="dash-panel">
-    <h2>Your sessions</h2>
-    <p class="dash-empty">You have not created any sessions yet.</p>
+<div class="card">
+    <div class="card-header">
+        <h3>Your sessions</h3>
+    </div>
+    <p class="dash-empty">You haven't created any sessions yet.</p>
 </div>
 {% endblock %}

@@ -33,6 +33,21 @@ def create_app():
             form_token = request.form.get("csrf_token")
             if not token or token != form_token:
                 abort(403)
+                
+    # Provide a notification count to all templates
+    @app.context_processor
+    def inject_notifications():
+        from app.repository import user_repo
+        count = 0
+        if session.get("user_id"):
+            role = session.get("user_role")
+            if role == "mentor":
+                reqs = user_repo.get_requests_for_mentor(session["user_id"])
+                count = sum(1 for r in reqs if r["status"] == "pending")
+            elif role == "learner":
+                reqs = user_repo.get_requests_for_learner(session["user_id"])
+                count = sum(1 for r in reqs if r["status"] in ("confirmed", "declined"))
+        return {"notif_count": count}
 
     # Register blueprints
     from app.routes.authRoutes import bp as auth_bp

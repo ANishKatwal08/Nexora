@@ -5,23 +5,34 @@
 {% block page_title %}Dashboard{% endblock %}
 
 {% block dash_content %}
-<div class="dash-stats">
-    <div class="dash-stat">
-        <div class="dash-stat-num">0</div>
-        <div class="dash-stat-label">Booked sessions</div>
+<div class="stats-row">
+    <div class="card kpi-card">
+        <div class="kpi-icon icon-teal"><i class="fa-solid fa-calendar-check"></i></div>
+        <div>
+            <span class="kpi-label">Booked sessions</span>
+            <span class="kpi-value">0</span>
+        </div>
     </div>
-    <div class="dash-stat">
-        <div class="dash-stat-num">0</div>
-        <div class="dash-stat-label">Completed</div>
+    <div class="card kpi-card">
+        <div class="kpi-icon icon-purple"><i class="fa-solid fa-circle-check"></i></div>
+        <div>
+            <span class="kpi-label">Completed</span>
+            <span class="kpi-value">0</span>
+        </div>
     </div>
-    <div class="dash-stat">
-        <div class="dash-stat-num">0</div>
-        <div class="dash-stat-label">Mentors</div>
+    <div class="card kpi-card">
+        <div class="kpi-icon icon-orange"><i class="fa-solid fa-user-group"></i></div>
+        <div>
+            <span class="kpi-label">Mentors</span>
+            <span class="kpi-value">0</span>
+        </div>
     </div>
 </div>
 
-<div class="dash-panel">
-    <h2>Your upcoming sessions</h2>
+<div class="card">
+    <div class="card-header">
+        <h3>Your upcoming sessions</h3>
+    </div>
     <p class="dash-empty">You have no sessions booked yet.</p>
 </div>
 {% endblock %}
