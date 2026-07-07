@@ -1,0 +1,28 @@
+{% extends "dash_base.html" %}
+{% set active = 'messages' %}
+
+{% block title %}Chat with {{ other.name }}{% endblock %}
+{% block page_title %}Chat with {{ other.name }}{% endblock %}
+
+{% block dash_content %}
+<div class="card chat-card">
+    <div class="chat-messages">
+        {% if messages %}
+            {% for m in messages %}
+                <div class="chat-bubble {{ 'mine' if m.sender_id == session.get('user_id') else 'theirs' }}">
+                    <p>{{ m.body }}</p>
+                    <span class="chat-time">{{ m.created_at.strftime('%b %d, %H:%M') }}</span>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="dash-empty">No messages yet. Say hello.</p>
+        {% endif %}
+    </div>
+
+    <form method="POST" action="{{ url_for('message.send', other_id=other.id) }}" class="chat-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="text" name="body" placeholder="Type a message..." autocomplete="off" required>
+        <button type="submit" class="btn-dash">Send</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "dash_base.html" %}
+{% set active = 'messages' %}
+
+{% block title %}Messages{% endblock %}
+{% block page_title %}Messages{% endblock %}
+
+{% block dash_content %}
+<div class="card">
+    <div class="card-header"><h3>Your conversations</h3></div>
+    {% if partners %}
+        <div class="convo-list">
+            {% for p in partners %}
+                <a href="{{ url_for('message.conversation', other_id=p.id) }}" class="convo-item">
+                    <div class="convo-avatar">
+                        {% if p.avatar_url %}
+                            <img src="{{ url_for('static', filename='uploads/' ~ p.avatar_url) }}" alt="">
+                        {% else %}
+                            {{ p.name[0]|upper }}
+                        {% endif %}
+                    </div>
+                    <div class="convo-info">
+                        <span class="convo-name">{{ p.name }}</span>
+                        <span class="convo-role">{{ p.role|capitalize }}</span>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="dash-empty">No conversations yet. Message a mentor from their profile to start one.</p>
+    {% endif %}
+</div>
+{% endblock %}
