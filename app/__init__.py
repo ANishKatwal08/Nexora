@@ -38,16 +38,39 @@ def create_app():
     @app.context_processor
     def inject_notifications():
         from app.repository import user_repo
-        count = 0
+        from flask import url_for
+        items = []
         if session.get("user_id"):
+            uid = session["user_id"]
             role = session.get("user_role")
+
             if role == "mentor":
-                reqs = user_repo.get_requests_for_mentor(session["user_id"])
-                count = sum(1 for r in reqs if r["status"] == "pending")
+                reqs = user_repo.get_requests_for_mentor(uid)
+                pending = [r for r in reqs if r["status"] == "pending"]
+                for r in pending:
+                    items.append({
+                        "text": r["learner_name"] + " requested a session",
+                        "link": url_for("session.mentor_requests"),
+                    })
             elif role == "learner":
-                reqs = user_repo.get_requests_for_learner(session["user_id"])
-                count = sum(1 for r in reqs if r["status"] in ("confirmed", "declined"))
-        return {"notif_count": count}
+                reqs = user_repo.get_requests_for_learner(uid)
+                answered = [r for r in reqs if r["status"] in ("confirmed", "declined")]
+                for r in answered:
+                    items.append({
+                        "text": r["mentor_name"] + " " + r["status"] + " your session",
+                        "link": url_for("session.my_requests"),
+                    })
+
+            # Unread messages, for everyone
+            senders = user_repo.get_unread_senders(uid)
+            for s in senders:
+                label = "message" if s["unread"] == 1 else "messages"
+                items.append({
+                    "text": str(s["unread"]) + " new " + label + " from " + s["name"],
+                    "link": url_for("message.conversation", other_id=s["id"]),
+                })
+
+        return {"notif_items": items, "notif_count": len(items)}
 
     # Register blueprints
     from app.routes.authRoutes import bp as auth_bp

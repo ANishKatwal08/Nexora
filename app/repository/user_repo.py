@@ -525,3 +525,49 @@ def get_conversation_partners(user_id):
             return cursor.fetchall()
     finally:
         connection.close()
+
+def get_unread_message_count(user_id):
+    """Count messages sent to this user that are unread."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT COUNT(*) AS c FROM messages WHERE recipient_id = %s AND is_read = FALSE",
+                (user_id,),
+            )
+            return cursor.fetchone()["c"]
+    finally:
+        connection.close()
+
+
+def get_unread_senders(user_id):
+    """Return distinct people who sent this user unread messages, with a count each."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT u.id, u.name, COUNT(*) AS unread
+                FROM messages m
+                JOIN users u ON u.id = m.sender_id
+                WHERE m.recipient_id = %s AND m.is_read = FALSE
+                GROUP BY u.id, u.name
+                """,
+                (user_id,),
+            )
+            return cursor.fetchall()
+    finally:
+        connection.close()
+
+def mark_messages_read(recipient_id, sender_id):
+    """Mark all messages from sender to recipient as read."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE messages SET is_read = TRUE WHERE recipient_id = %s AND sender_id = %s",
+                (recipient_id, sender_id),
+            )
+        connection.commit()
+    finally:
+        connection.close()

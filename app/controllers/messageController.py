@@ -28,3 +28,14 @@ def send(other_id):
         if other:
             user_repo.send_message(session["user_id"], other_id, body)
     return redirect(url_for("message.conversation", other_id=other_id))
+
+@login_required
+def conversation(other_id):
+    me = session["user_id"]
+    other = user_repo.get_user_by_id(other_id)
+    if not other:
+        abort(404)
+
+    user_repo.mark_messages_read(me, other_id)
+    messages = user_repo.get_conversation(me, other_id)
+    return render_template("dashboard/conversation.html", other=other, messages=messages)

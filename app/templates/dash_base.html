@@ -91,11 +91,17 @@
                     <div class="notif-wrap">
                         <button class="header-icon" id="notifBtn" title="Notifications">
                             <i class="fa-solid fa-bell"></i>
-                            <span class="notif-dot"></span>
+                            {% if notif_count > 0 %}<span class="notif-dot"></span>{% endif %}
                         </button>
                         <div class="notif-dropdown" id="notifDropdown">
                             <h4>Notifications</h4>
-                            <p class="notif-empty">No notifications</p>
+                            {% if notif_items %}
+                                {% for n in notif_items %}
+                                    <a href="{{ n.link }}" class="notif-item">{{ n.text }}</a>
+                                {% endfor %}
+                            {% else %}
+                                <p class="notif-empty">No notifications</p>
+                            {% endif %}
                         </div>
                     </div>
 

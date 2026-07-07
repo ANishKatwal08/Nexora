@@ -684,3 +684,15 @@ body.dash-body {
     font-size: 14px; outline: none;
 }
 .chat-form input:focus { border-color: var(--accent-teal); }
+
+.notif-item {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 13px;
+    border-bottom: 1px solid var(--card-border);
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: var(--hover-bg); text-decoration: none; }
