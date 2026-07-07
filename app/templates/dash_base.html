@@ -33,18 +33,18 @@
                 </a>
 
                 {% if session.get('user_role') == 'mentor' %}
-                    <a href="#" class="menu-item {{ 'active' if active == 'sessions' }}">
-                        <i class="fa-solid fa-calendar-days"></i> My sessions
+                    <a href="{{ url_for('session.mentor_requests') }}" class="menu-item {{ 'active' if active == 'requests' }}">
+                        <i class="fa-solid fa-calendar-days"></i> Requests
                     </a>
-                    <a href="#" class="menu-item {{ 'active' if active == 'mentor_profile' }}">
+                    <a href="{{ url_for('mentor.mentor_profile') }}" class="menu-item {{ 'active' if active == 'mentor_profile' }}">
                         <i class="fa-solid fa-id-badge"></i> Mentor profile
                     </a>
                 {% else %}
-                    <a href="#" class="menu-item {{ 'active' if active == 'browse' }}">
-                        <i class="fa-solid fa-magnifying-glass"></i> Browse sessions
+                    <a href="{{ url_for('browse.browse') }}" class="menu-item {{ 'active' if active == 'browse' }}">
+                        <i class="fa-solid fa-magnifying-glass"></i> Browse mentors
                     </a>
-                    <a href="#" class="menu-item {{ 'active' if active == 'bookings' }}">
-                        <i class="fa-solid fa-bookmark"></i> My bookings
+                    <a href="{{ url_for('session.my_requests') }}" class="menu-item {{ 'active' if active == 'bookings' }}">
+                        <i class="fa-solid fa-bookmark"></i> My requests
                     </a>
                 {% endif %}
 
@@ -69,7 +69,7 @@
         <main class="main-content">
             <header class="top-header">
                 <div class="welcome-text">
-                    <span class="sub-greeting">Welcome back, {{ session.get('user_name') }} &#128075;</span>
+                    <span class="sub-greeting">Welcome back, {{ session.get('user_name') }}</span>
                     <h1>{% block page_title %}Dashboard{% endblock %}</h1>
                 </div>
 

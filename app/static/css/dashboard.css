@@ -504,3 +504,64 @@ body.dash-body {
     .top-header { flex-direction: column; align-items: flex-start; gap: 14px; }
     .notif-dropdown { right: auto; left: 0; }
 }
+
+/* Session request cards */
+.req-list { display: flex; flex-direction: column; gap: 16px; }
+.req-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    padding: 22px 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+}
+.req-main { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.req-info h3 { font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 2px; }
+.req-skill { color: var(--accent-teal); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+.req-note { color: var(--text-muted); font-size: 14px; margin-bottom: 6px; }
+.req-time { font-size: 14px; font-weight: 500; color: var(--text-main); }
+.req-status {
+    font-size: 11px; font-weight: 700; padding: 5px 13px; border-radius: 20px;
+    white-space: nowrap; text-transform: uppercase; letter-spacing: 0.3px;
+}
+.status-pending { background: rgba(255, 114, 13, 0.15); color: #ff720d; }
+.status-confirmed { background: var(--accent-active-bg); color: var(--accent-teal); }
+.status-declined { background: rgba(241, 65, 108, 0.15); color: var(--danger); }
+.status-completed { background: var(--hover-bg); color: var(--text-muted); }
+.req-actions {
+    display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+    margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--card-border);
+}
+.req-confirm-form { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.req-actions input[type="datetime-local"] {
+    padding: 10px 14px; border: 1px solid var(--card-border); border-radius: 14px;
+    background: var(--input-bg); color: var(--text-main); font-size: 14px;
+    font-family: inherit; outline: none;
+}
+.req-actions input[type="datetime-local"]:focus {
+    border-color: var(--accent-teal); background: var(--input-bg-focus);
+}
+.req-actions .btn {
+    background: var(--accent-grad); color: #fff; border: none;
+    padding: 10px 20px; border-radius: 20px; font-size: 14px; font-weight: 600;
+    cursor: pointer; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.2);
+}
+.req-actions .btn:hover { opacity: 0.95; }
+.btn-outline-danger {
+    background: none; border: 1px solid var(--danger); color: var(--danger);
+    padding: 10px 20px; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.btn-outline-danger:hover { background: var(--danger); color: #fff; }
+
+/* Skill tags */
+.skill-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+.skill-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--input-bg); border: 1px solid var(--card-border);
+    color: var(--text-main); padding: 8px 14px; border-radius: 30px;
+    font-size: 13px; font-weight: 500;
+}
+.skill-remove {
+    background: none; border: none; color: var(--text-muted);
+    cursor: pointer; font-size: 17px; line-height: 1; padding: 0; display: flex;
+}
+.skill-remove:hover { color: var(--danger); }

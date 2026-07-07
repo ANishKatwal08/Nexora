@@ -5,7 +5,7 @@
 {% block page_title %}Profile{% endblock %}
 
 {% block dash_content %}
-<div class="dash-panel profile-panel">
+<div class="card profile-card">
     <form method="POST" action="{{ url_for('profile.profile_update') }}" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
@@ -40,7 +40,7 @@
             <textarea id="bio" name="bio" rows="4" placeholder="Tell people a little about yourself">{{ user.bio or "" }}</textarea>
         </div>
 
-        <button type="submit" class="btn">Save changes</button>
+        <button type="submit" class="btn-dash">Save changes</button>
     </form>
 </div>
 {% endblock %}

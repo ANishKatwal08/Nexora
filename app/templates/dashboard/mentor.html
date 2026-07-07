@@ -10,29 +10,47 @@
         <div class="kpi-icon icon-teal"><i class="fa-solid fa-calendar-days"></i></div>
         <div>
             <span class="kpi-label">Sessions hosted</span>
-            <span class="kpi-value">0</span>
+            <span class="kpi-value">{{ sessions_hosted }}</span>
         </div>
     </div>
     <div class="card kpi-card">
         <div class="kpi-icon icon-pink"><i class="fa-solid fa-bookmark"></i></div>
         <div>
             <span class="kpi-label">Bookings</span>
-            <span class="kpi-value">0</span>
+            <span class="kpi-value">{{ bookings }}</span>
         </div>
     </div>
     <div class="card kpi-card">
         <div class="kpi-icon icon-purple"><i class="fa-solid fa-star"></i></div>
         <div>
             <span class="kpi-label">Average rating</span>
-            <span class="kpi-value">–</span>
+            <span class="kpi-value">{{ "%.1f"|format(rating) if rating else "–" }}</span>
         </div>
     </div>
 </div>
 
 <div class="card">
     <div class="card-header">
-        <h3>Your sessions</h3>
+        <h3>Upcoming sessions</h3>
+        <a href="{{ url_for('session.mentor_requests') }}" class="view-link">View all</a>
     </div>
-    <p class="dash-empty">You haven't created any sessions yet.</p>
+    {% if upcoming %}
+        <div class="req-list">
+            {% for req in upcoming %}
+                <div class="req-card">
+                    <div class="req-main">
+                        <div class="req-info">
+                            <h3>{{ req.learner_name }}</h3>
+                            <p class="req-skill">{{ req.skill_name or "General session" }}</p>
+                            {% if req.scheduled_at %}<p class="req-time">Scheduled for {{ req.scheduled_at }}</p>{% endif %}
+                        </div>
+                        <span class="req-status status-confirmed">Confirmed</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="dash-empty">You have no upcoming sessions yet. Requests you confirm will show here.</p>
+    {% endif %}
 </div>
 {% endblock %}

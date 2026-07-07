@@ -10,21 +10,21 @@
         <div class="kpi-icon icon-teal"><i class="fa-solid fa-calendar-check"></i></div>
         <div>
             <span class="kpi-label">Booked sessions</span>
-            <span class="kpi-value">0</span>
+            <span class="kpi-value">{{ booked }}</span>
         </div>
     </div>
     <div class="card kpi-card">
         <div class="kpi-icon icon-purple"><i class="fa-solid fa-circle-check"></i></div>
         <div>
             <span class="kpi-label">Completed</span>
-            <span class="kpi-value">0</span>
+            <span class="kpi-value">{{ completed }}</span>
         </div>
     </div>
     <div class="card kpi-card">
         <div class="kpi-icon icon-orange"><i class="fa-solid fa-user-group"></i></div>
         <div>
             <span class="kpi-label">Mentors</span>
-            <span class="kpi-value">0</span>
+            <span class="kpi-value">{{ mentors }}</span>
         </div>
     </div>
 </div>
@@ -32,7 +32,25 @@
 <div class="card">
     <div class="card-header">
         <h3>Your upcoming sessions</h3>
+        <a href="{{ url_for('session.my_requests') }}" class="view-link">View all</a>
     </div>
-    <p class="dash-empty">You have no sessions booked yet.</p>
+    {% if upcoming %}
+        <div class="req-list">
+            {% for req in upcoming %}
+                <div class="req-card">
+                    <div class="req-main">
+                        <div class="req-info">
+                            <h3>{{ req.mentor_name }}</h3>
+                            <p class="req-skill">{{ req.skill_name or "General session" }}</p>
+                            {% if req.scheduled_at %}<p class="req-time">Scheduled for {{ req.scheduled_at }}</p>{% endif %}
+                        </div>
+                        <span class="req-status status-confirmed">Confirmed</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="dash-empty">You have no upcoming sessions. Browse mentors to book one.</p>
+    {% endif %}
 </div>
 {% endblock %}
