@@ -1291,3 +1291,45 @@ a:hover { text-decoration: underline; }
   justify-content: center;
   padding: 0 4px;
 }
+
+/* Mentor detail page */
+.mentor-detail { padding: 40px 0 80px; }
+.detail-back { display: inline-block; margin-bottom: 20px; color: var(--text-muted); font-weight: 500; }
+.detail-back:hover { color: var(--accent); text-decoration: none; }
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.detail-avatar {
+  width: 96px; height: 96px; border-radius: 50%;
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  font-size: 40px; font-weight: 700; overflow: hidden; flex-shrink: 0;
+}
+.detail-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.detail-head-info { flex: 1; min-width: 200px; }
+.detail-head-info h1 { font-size: 28px; font-weight: 700; }
+.detail-profession { color: var(--accent); font-weight: 600; font-size: 16px; }
+.detail-headline { color: var(--text-muted); margin-top: 4px; }
+.detail-meta { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 12px; color: var(--text-muted); font-size: 15px; font-weight: 500; }
+.detail-rating .star { color: #F59F00; }
+.detail-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+.detail-section { margin-bottom: 24px; }
+.detail-section h2 { font-size: 19px; font-weight: 700; margin-bottom: 14px; }
+.detail-empty { color: var(--text-muted); }
+.review-list { display: flex; flex-direction: column; gap: 18px; }
+.review-item { border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+.review-item:last-child { border-bottom: none; padding-bottom: 0; }
+.review-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.review-name { font-weight: 700; }
+.review-stars { color: #F59F00; font-size: 14px; }
+.review-comment { color: var(--text-muted); }
+
+@media (max-width: 768px) {
+  .detail-grid { grid-template-columns: 1fr; }
+}
+
+.mentor-name a { color: inherit; }
+.mentor-name a:hover { color: var(--accent); text-decoration: none; }

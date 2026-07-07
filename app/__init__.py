@@ -71,6 +71,9 @@ def create_app():
     from app.routes.mentorRoutes import bp as mentor_bp
     app.register_blueprint(mentor_bp)
 
+    from app.routes.messageRoutes import bp as message_bp
+    app.register_blueprint(message_bp)
+
     @app.route("/")
     def home():
         return render_template("home.html")

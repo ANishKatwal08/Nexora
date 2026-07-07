@@ -20,11 +20,13 @@
 
     <div class="dashboard-container">
 
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="logo">
                 <i class="fa-solid fa-circle-nodes"></i>
                 <span>Nex<span class="logo-accent">ora</span></span>
             </div>
+
+           
 
             <nav class="menu">
                 <a href="{{ url_for('dashboard.dashboard') }}"
@@ -48,6 +50,10 @@
                     </a>
                 {% endif %}
 
+                <a href="{{ url_for('message.inbox') }}" class="menu-item {{ 'active' if active == 'messages' }}">
+                    <i class="fa-solid fa-comments"></i> Messages
+                </a>
+                    
                 <hr class="menu-divider">
 
                 <a href="{{ url_for('profile.profile') }}"
@@ -59,17 +65,21 @@
                 </a>
             </nav>
 
+            
+
             <div class="sidebar-bottom">
                 <a href="{{ url_for('auth.logout') }}" class="menu-item">
                     <i class="fa-solid fa-right-from-bracket"></i> Log out
                 </a>
             </div>
+
+            <div class="sidebar-resizer" id="sidebarResizer"></div>
         </aside>
 
         <main class="main-content">
             <header class="top-header">
                 <div class="welcome-text">
-                    <span class="sub-greeting">Welcome back, {{ session.get('user_name') }}</span>
+                    <span class="sub-greeting">Welcome back, {{ session.get('user_name') }} &#128075;</span>
                     <h1>{% block page_title %}Dashboard{% endblock %}</h1>
                 </div>
 
@@ -147,6 +157,47 @@
 
             document.addEventListener('click', function () {
                 dropdown.classList.remove('open');
+            });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            const sidebar = document.getElementById('sidebar');
+            const resizer = document.getElementById('sidebarResizer');
+            if (!sidebar || !resizer) return;
+
+            const MIN = 200;
+            const MAX = 380;
+
+            const saved = localStorage.getItem('nexora-sidebar-width');
+            if (saved) sidebar.style.width = saved + 'px';
+
+            let dragging = false;
+
+            resizer.addEventListener('mousedown', function (e) {
+                dragging = true;
+                document.body.style.userSelect = 'none';
+                document.body.style.cursor = 'col-resize';
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', function (e) {
+                if (!dragging) return;
+                const rect = sidebar.getBoundingClientRect();
+                let width = e.clientX - rect.left;
+                if (width < MIN) width = MIN;
+                if (width > MAX) width = MAX;
+                sidebar.style.width = width + 'px';
+            });
+
+            document.addEventListener('mouseup', function () {
+                if (!dragging) return;
+                dragging = false;
+                document.body.style.userSelect = '';
+                document.body.style.cursor = '';
+                const w = parseInt(sidebar.style.width, 10);
+                if (w) localStorage.setItem('nexora-sidebar-width', w);
             });
         })();
     </script>

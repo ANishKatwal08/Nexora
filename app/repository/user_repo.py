@@ -467,3 +467,61 @@ def update_mentor_details(user_id, profession, headline, hourly_rate, years_expe
         connection.commit()
     finally:
         connection.close()
+
+
+def send_message(sender_id, recipient_id, body):
+    """Store a message from one user to another."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "INSERT INTO messages (sender_id, recipient_id, body) VALUES (%s, %s, %s)",
+                (sender_id, recipient_id, body),
+            )
+        connection.commit()
+    finally:
+        connection.close()
+
+
+def get_conversation(user_a, user_b):
+    """Return all messages between two users, oldest first."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT * FROM messages
+                WHERE (sender_id = %s AND recipient_id = %s)
+                   OR (sender_id = %s AND recipient_id = %s)
+                ORDER BY created_at ASC
+                """,
+                (user_a, user_b, user_b, user_a),
+            )
+            return cursor.fetchall()
+    finally:
+        connection.close()
+
+
+def get_conversation_partners(user_id):
+    """Return the list of users this person has messaged with, most recent first."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT u.id, u.name, u.avatar_url, u.role,
+                       MAX(m.created_at) AS last_time
+                FROM messages m
+                JOIN users u ON u.id = CASE
+                    WHEN m.sender_id = %s THEN m.recipient_id
+                    ELSE m.sender_id
+                END
+                WHERE m.sender_id = %s OR m.recipient_id = %s
+                GROUP BY u.id, u.name, u.avatar_url, u.role
+                ORDER BY last_time DESC
+                """,
+                (user_id, user_id, user_id),
+            )
+            return cursor.fetchall()
+    finally:
+        connection.close()
