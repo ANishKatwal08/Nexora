@@ -117,18 +117,6 @@ def get_user_by_id(user_id):
     finally:
         connection.close()
 
-def get_user_by_id(user_id):
-    connection = get_connection()
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(
-                "SELECT id, name, email, role, bio, avatar_url FROM users WHERE id = %s",
-                (user_id,),
-            )
-            return cursor.fetchone()
-    finally:
-        connection.close()
-
 
 def update_user_profile(user_id, name, bio):
     connection = get_connection()
@@ -402,6 +390,80 @@ def delete_user(user_id):
     try:
         with connection.cursor() as cursor:
             cursor.execute("DELETE FROM users WHERE id = %s", (user_id,))
+        connection.commit()
+    finally:
+        connection.close()
+
+def create_feedback(request_id, learner_id, mentor_id, rating, comment):
+    """Save a review for a completed session, then refresh the mentor's average rating."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO feedback (request_id, learner_id, mentor_id, rating, comment)
+                VALUES (%s, %s, %s, %s, %s)
+                """,
+                (request_id, learner_id, mentor_id, rating, comment),
+            )
+            # Recompute the mentor's average rating from all their feedback
+            cursor.execute(
+                "SELECT AVG(rating) AS avg_rating FROM feedback WHERE mentor_id = %s",
+                (mentor_id,),
+            )
+            avg = cursor.fetchone()["avg_rating"]
+            cursor.execute(
+                "UPDATE users SET rating = %s WHERE id = %s",
+                (round(avg, 1), mentor_id),
+            )
+        connection.commit()
+    finally:
+        connection.close()
+
+
+def get_feedback_for_request(request_id):
+    """Return the review for a session, or None."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM feedback WHERE request_id = %s", (request_id,))
+            return cursor.fetchone()
+    finally:
+        connection.close()
+
+
+def get_feedback_for_mentor(mentor_id):
+    """Return all reviews for a mentor, with the learner name."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT f.*, u.name AS learner_name
+                FROM feedback f
+                JOIN users u ON f.learner_id = u.id
+                WHERE f.mentor_id = %s
+                ORDER BY f.created_at DESC
+                """,
+                (mentor_id,),
+            )
+            return cursor.fetchall()
+    finally:
+        connection.close()
+
+def update_mentor_details(user_id, profession, headline, hourly_rate, years_experience):
+    """Update a mentor's profile detail fields."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                UPDATE users
+                SET profession = %s, headline = %s, hourly_rate = %s, years_experience = %s
+                WHERE id = %s
+                """,
+                (profession, headline, hourly_rate, years_experience, user_id),
+            )
         connection.commit()
     finally:
         connection.close()

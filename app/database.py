@@ -29,6 +29,9 @@ def create_tables():
                     role VARCHAR(20) NOT NULL DEFAULT 'learner',
                     bio TEXT,
                     profession VARCHAR(120),
+                    headline VARCHAR(150),
+                    hourly_rate INT,
+                    years_experience INT,
                     avatar_url VARCHAR(255),
                     rating DECIMAL(2,1) DEFAULT 0.0,
                     theme VARCHAR(10) DEFAULT 'light',
@@ -87,6 +90,22 @@ def create_tables():
                     FOREIGN KEY (learner_id) REFERENCES users(id) ON DELETE CASCADE,
                     FOREIGN KEY (mentor_id) REFERENCES users(id) ON DELETE CASCADE,
                     FOREIGN KEY (skill_id) REFERENCES skills(id) ON DELETE SET NULL
+                )
+            """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS feedback (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    request_id INT NOT NULL,
+                    learner_id INT NOT NULL,
+                    mentor_id INT NOT NULL,
+                    rating INT NOT NULL,
+                    comment TEXT,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (request_id) REFERENCES session_requests(id) ON DELETE CASCADE,
+                    FOREIGN KEY (learner_id) REFERENCES users(id) ON DELETE CASCADE,
+                    FOREIGN KEY (mentor_id) REFERENCES users(id) ON DELETE CASCADE,
+                    UNIQUE KEY unique_request_feedback (request_id)
                 )
             """)
         connection.commit()

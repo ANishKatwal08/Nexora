@@ -6,16 +6,36 @@
 
 {% block dash_content %}
 
-<div class="card">
-    <div class="card-header"><h3>Your profession</h3></div>
-    <p class="dash-empty" style="margin-bottom: 16px;">This shows on your profile so learners know your background.</p>
-    <form method="POST" action="{{ url_for('mentor.update_mentor_profession') }}">
+<div class="card profile-card">
+    <div class="card-header"><h3>Your mentor details</h3></div>
+    <form method="POST" action="{{ url_for('mentor.update_mentor_details') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <div class="field" style="display: flex; gap: 12px; margin-bottom: 0;">
-            <input type="text" name="profession" value="{{ user.profession or '' }}"
-                   placeholder="For example, Senior Web Developer" style="flex: 1;">
-            <button type="submit" class="btn-dash">Save</button>
+
+        <div class="field">
+            <label class="field-label" for="profession">Profession</label>
+            <input type="text" id="profession" name="profession" value="{{ user.profession or '' }}"
+                   placeholder="For example, Senior Web Developer">
         </div>
+
+        <div class="field">
+            <label class="field-label" for="headline">Headline</label>
+            <input type="text" id="headline" name="headline" value="{{ user.headline or '' }}"
+                   placeholder="One line about what you help with">
+        </div>
+
+        <div class="field">
+            <label class="field-label" for="hourly_rate">Hourly rate (USD)</label>
+            <input type="text" id="hourly_rate" name="hourly_rate" value="{{ user.hourly_rate or '' }}"
+                   placeholder="For example, 40">
+        </div>
+
+        <div class="field">
+            <label class="field-label" for="years_experience">Years of experience</label>
+            <input type="text" id="years_experience" name="years_experience" value="{{ user.years_experience or '' }}"
+                   placeholder="For example, 5">
+        </div>
+
+        <button type="submit" class="btn-dash">Save details</button>
     </form>
 </div>
 
