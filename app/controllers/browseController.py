@@ -1,6 +1,6 @@
-from flask import render_template, request
-from app.repository import user_repo
 
+from flask import render_template, request, redirect, url_for, flash
+from app.repository import user_repo
 
 def browse():
     # Multi select values come as lists
@@ -50,4 +50,20 @@ def browse():
         selected_skill_ids=selected_skill_ids,
         selected_categories=selected_categories,
         search=search,
+    )
+
+def mentor_detail(mentor_id):
+    mentor = user_repo.get_user_by_id(mentor_id)
+    if not mentor or mentor["role"] != "mentor":
+        flash("That mentor was not found.", "danger")
+        return redirect(url_for("browse.browse"))
+
+    skills = user_repo.get_mentor_skills(mentor_id)
+    reviews = user_repo.get_feedback_for_mentor(mentor_id)
+
+    return render_template(
+        "mentor_detail.html",
+        mentor=mentor,
+        skills=skills,
+        reviews=reviews,
     )

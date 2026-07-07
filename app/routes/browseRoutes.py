@@ -6,6 +6,7 @@ bp = Blueprint("browse", __name__)
 
 def register_routes():
     bp.add_url_rule("/browse", view_func=browseController.browse, methods=["GET"])
+    bp.add_url_rule("/mentor/<int:mentor_id>", view_func=browseController.mentor_detail, methods=["GET"])
 
 
 register_routes()

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}{{ mentor.name }}, mentor on Nexora{% endblock %}
+
+{% block content %}
+<div class="mentor-detail container">
+
+    <a href="{{ url_for('browse.browse') }}" class="detail-back">&larr; Back to browse</a>
+
+    <div class="detail-header card">
+        <div class="detail-avatar avatar-color-{{ mentor.name|length % 8 }}">
+            {% if mentor.avatar_url %}
+                <img src="{{ url_for('static', filename='uploads/' ~ mentor.avatar_url) }}" alt="{{ mentor.name }}">
+            {% else %}
+                <span>{{ mentor.name[0]|upper }}</span>
+            {% endif %}
+        </div>
+        <div class="detail-head-info">
+            <h1>{{ mentor.name }}</h1>
+            <p class="detail-profession">{{ mentor.profession or "Mentor" }}</p>
+            {% if mentor.headline %}<p class="detail-headline">{{ mentor.headline }}</p>{% endif %}
+            <div class="detail-meta">
+                {% if mentor.rating and mentor.rating > 0 %}
+                    <span class="detail-rating"><span class="star">&#9733;</span> {{ "%.1f"|format(mentor.rating) }}</span>
+                {% endif %}
+                {% if mentor.years_experience %}<span>{{ mentor.years_experience }} yrs experience</span>{% endif %}
+                {% if mentor.hourly_rate %}<span>${{ mentor.hourly_rate }} / hour</span>{% endif %}
+            </div>
+        </div>
+        <div class="detail-action">
+            {% if session.get('user_id') and session.get('user_role') == 'learner' %}
+                <form method="POST" action="{{ url_for('session.request_session', mentor_id=mentor.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn">Request a session</button>
+                </form>
+                <a href="{{ url_for('message.conversation', other_id=mentor.id) }}" class="btn-outline" style="margin-top:10px; display:inline-block;">Message</a>
+            {% elif not session.get('user_id') %}
+                <a href="{{ url_for('auth.login') }}" class="btn">Log in to request</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="detail-grid">
+        <div class="detail-main">
+            {% if mentor.bio %}
+                <div class="card detail-section">
+                    <h2>About</h2>
+                    <p>{{ mentor.bio }}</p>
+                </div>
+            {% endif %}
+
+            <div class="card detail-section">
+                <h2>Reviews {% if reviews %}({{ reviews|length }}){% endif %}</h2>
+                {% if reviews %}
+                    <div class="review-list">
+                        {% for review in reviews %}
+                            <div class="review-item">
+                                <div class="review-top">
+                                    <span class="review-name">{{ review.learner_name }}</span>
+                                    <span class="review-stars">
+                                        {% for i in range(review.rating) %}&#9733;{% endfor %}{% for i in range(5 - review.rating) %}&#9734;{% endfor %}
+                                    </span>
+                                </div>
+                                {% if review.comment %}<p class="review-comment">{{ review.comment }}</p>{% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="detail-empty">No reviews yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="detail-side">
+            <div class="card detail-section">
+                <h2>Skills</h2>
+                {% if skills %}
+                    <div class="mentor-skills">
+                        {% for skill in skills %}
+                            <span class="mentor-skill-tag">{{ skill.name }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="detail-empty">No skills listed yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
