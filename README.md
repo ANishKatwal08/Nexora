@@ -1,84 +1,176 @@
-Nexora
+# Nexora
 
-Nexora is a collaborative learning and mentorship platform. People sign up either to learn or to mentor, and from there they can share skills, schedule solo or group sessions, and keep their learning resources in one place.
+Nexora is a collaborative learning and mentorship platform. Learners find mentors across a wide range of skills, request one on one sessions, message their mentors, and leave reviews afterwards. Mentors manage their profile, respond to session requests, and build a rating from real feedback. An admin oversees the whole platform.
 
-This project is still in active development, so some of the features below are being built out as I go.
+This project was built with Flask and MySQL using a clean layered structure, with a focus on security, role based access, and a polished user interface.
 
-What it does
+## Features
 
+**Accounts and security**
+- Registration and login with multiple identifiers (email, username, or phone)
+- Two step verification: after the password, a six digit code is emailed and must be entered to finish signing in
+- Passwords hashed with Werkzeug, never stored in plain text
+- CSRF protection on every form
+- Change password and delete account from settings
 
-Sign up and log in as a learner, mentor, or admin
-Secure authentication with password hashing, email-based two-factor login, and password reset
-Mentors can create, edit, and manage their sessions
-Learners can browse, book, and keep track of their sessions
-Leave feedback and view mentor ratings
-Attach learning resources to sessions
-Search and filter sessions by skill, rating, and more
-A dashboard tailored to each role
-Dark and light mode
+**Roles**
 
+Nexora has three roles, each with its own dashboard and permissions.
+- Learner: browse mentors, request sessions, message mentors, leave reviews
+- Mentor: set up a mentor profile, manage skills, respond to requests, host sessions
+- Admin: view platform statistics and manage users, including activating and deactivating accounts
 
-Tech stack
+**Mentorship**
+- A searchable mentor marketplace with category and skill filters, name search, and sorting by rating
+- Detailed mentor profiles with profession, headline, rate, experience, skills, and reviews
+- A full session request flow: request, confirm with a time, decline, and mark completed
+- Ratings and written reviews after completed sessions, which update a mentor's average rating
 
-LayerTechnologyBackendFlask (Python)DatabaseMySQLTemplatingJinja2FrontendHTML, CSS, JavaScriptTestingpytest
+**Communication**
+- Direct messaging between learners and mentors
+- A notification system for new requests, responses, and messages
 
-Project structure
+**Experience**
+- A modern dashboard with light and dark themes
+- A help centre with a frequently asked questions section and support contact
 
-nexora/
-├── run.py              Entry point
-├── config.py           Configuration (loads from .env)
-├── requirements.txt    Python dependencies
-├── schema.sql          MySQL database schema
-└── app/
-    ├── __init__.py     App factory
-    ├── database.py     Database connection and table setup
-    ├── auth.py         Access-control decorators
-    ├── routes/         URL to controller mapping
-    ├── controllers/    Application logic
-    ├── repository/     Database queries
-    ├── static/         CSS, JS, images
-    └── templates/      Jinja2 templates
+## Tech stack
 
-Getting started
+- Backend: Python, Flask with blueprints
+- Database: MySQL, accessed with raw pymysql and parameterized queries
+- Frontend: HTML, CSS, and vanilla JavaScript with Jinja templates
+- Email: Gmail SMTP for verification codes
+- Structure: a layered design of routes, controllers, and a repository, with tables created on startup
 
-You will need Python 3.8 or newer, MySQL Server with MySQL Workbench, and Git.
+## Project structure
 
-bash# Clone the repository
-git clone https://github.com/ANishKatwal08/nexora.git
-cd nexora
+```
+Nexora/
+    run.py
+    config.py
+    requirements.txt
+    app/
+        __init__.py
+        database.py
+        auth.py
+        email_service.py
+        controllers/
+            authController.py
+            dashboardController.py
+            profileController.py
+            browseController.py
+            mentorController.py
+            sessionController.py
+            settingsController.py
+            messageController.py
+            helpController.py
+            adminController.py
+        routes/
+        repository/
+            user_repo.py
+        templates/
+            base.html
+            dash_base.html
+            home.html
+            auth/
+            dashboard/
+            partials/
+        static/
+            css/
+            js/
+            img/
+            uploads/
+```
 
-# Create and activate a virtual environment
+## Setup and installation
+
+### Prerequisites
+- Python 3.10 or newer
+- MySQL Server and MySQL Workbench
+- A Gmail account with an app password, for sending verification emails
+
+### Steps
+
+1. Clone the repository
+
+```
+git clone https://github.com/ANishKatwal08/Nexora.git
+cd Nexora
+```
+
+2. Create and activate a virtual environment
+
+On Windows:
+
+```
 python -m venv venv
-venv\Scripts\activate        # Windows
-# source venv/bin/activate   # macOS / Linux
+venv\Scripts\activate
+```
 
-# Install dependencies
+On macOS or Linux:
+
+```
+python3 -m venv venv
+source venv/bin/activate
+```
+
+3. Install the dependencies
+
+```
 pip install -r requirements.txt
+```
 
-# Set up the database:
-# create a database in MySQL Workbench, then run schema.sql
-# (detailed steps to follow)
+4. Create the database
 
-# Set up environment variables:
-# copy .env.example to .env and fill in your own values
+In MySQL Workbench, create a database named nexora:
 
-# Run the app
+```
+CREATE DATABASE nexora;
+```
+
+The application creates all the tables automatically when it first runs.
+
+5. Set up the environment file
+
+Create a file named .env in the project root with your own values:
+
+```
+SECRET_KEY=your-secret-key
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your-mysql-password
+DB_NAME=nexora
+MAIL_SENDER=your-gmail-address
+MAIL_APP_PASSWORD=your-gmail-app-password
+```
+
+The .env file is kept out of version control and should never be shared.
+
+6. Run the application
+
+```
 python run.py
+```
 
-Once it is running, the app is available at http://127.0.0.1:5000.
+Open a browser to http://127.0.0.1:5000
 
-Detailed database and environment setup instructions will be added as the project settles.
+## Test accounts
 
-Running tests
+To try the two main roles, register your own learner and mentor accounts. Because login uses email verification, use an email address you can actually receive mail at, so you can read the code.
 
-pytest
+The admin account is created by registering a normal account, then promoting it in the database:
 
-Test details will be added once the test suite is in place.
+```
+UPDATE nexora.users SET role = 'admin' WHERE email = 'your-email@example.com';
+```
 
-Author
+Log out and back in for the change to take effect.
 
-Anish Katwal
+## Notes
 
-License
+- The mentor marketplace is populated with sample mentor accounts so the browsing, filtering, and search features can be demonstrated. These are clearly marked sample data.
+- All session, message, and review data is created through normal use of the application.
 
-This project was created for educational purposes.
+## Author
+
+Built by Anish Katwal as a collaborative learning platform project.
