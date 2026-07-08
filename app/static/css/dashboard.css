@@ -696,3 +696,66 @@ body.dash-body {
 }
 .notif-item:last-child { border-bottom: none; }
 .notif-item:hover { background: var(--hover-bg); text-decoration: none; }
+
+.btn-outline-msg {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-active-bg);
+    color: var(--accent-teal);
+    border: 1px solid var(--accent-teal);
+    padding: 9px 18px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+.btn-outline-msg:hover {
+    background: var(--accent-teal);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* FAQ */
+.faq-list { display: flex; flex-direction: column; gap: 8px; }
+.faq-item { border: 1px solid var(--card-border); border-radius: 14px; overflow: hidden; }
+.faq-q {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 16px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: inherit;
+}
+.faq-q:hover { background: var(--hover-bg); }
+.faq-arrow { color: var(--accent-teal); font-size: 20px; font-weight: 400; }
+.faq-a {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+    transition: max-height 0.2s ease, padding 0.2s ease;
+}
+.faq-item.open .faq-a { padding: 0 18px 16px; max-height: 300px; }
+.faq-item.open .faq-arrow { transform: rotate(45deg); }
+
+/* Support contact */
+.support-contact { display: flex; flex-direction: column; gap: 16px; }
+.support-item { display: flex; align-items: center; gap: 14px; }
+.support-item i {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: var(--accent-active-bg); color: var(--accent-teal);
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.support-item div { display: flex; flex-direction: column; }
+.support-label { font-size: 13px; color: var(--text-muted); }
+.support-value { font-size: 15px; font-weight: 600; color: var(--text-main); }

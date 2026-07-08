@@ -1,0 +1,89 @@
+{% extends "dash_base.html" %}
+{% set active = 'help' %}
+
+{% block title %}Help and support{% endblock %}
+{% block page_title %}Help and support{% endblock %}
+
+{% block dash_content %}
+
+<div class="card">
+    <div class="card-header"><h3>How can we help?</h3></div>
+    <p class="dash-empty">Find answers to common questions below. If you still need help, reach out to our support team and we will get back to you.</p>
+</div>
+
+<div class="card">
+    <div class="card-header"><h3>Getting started</h3></div>
+    <div class="faq-list">
+        <div class="faq-item">
+            <button class="faq-q">How do I find a mentor?<span class="faq-arrow">+</span></button>
+            <div class="faq-a">Go to Browse mentors from the sidebar. You can filter by category and skill, search by name, and sort by rating. Click any mentor to see their full profile, skills, and reviews.</div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-q">How do I request a session?<span class="faq-arrow">+</span></button>
+            <div class="faq-a">On a mentor's card or profile, click Request a session. Your request is sent to the mentor, who can confirm it with a time or decline it. You can track all your requests under My requests.</div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-q">How do I become a mentor?<span class="faq-arrow">+</span></button>
+            <div class="faq-a">When you register, choose to join as a mentor. Then complete your mentor profile with your profession, headline, rate, experience, and the skills you teach so learners can find you.</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header"><h3>Sessions and messaging</h3></div>
+    <div class="faq-list">
+        <div class="faq-item">
+            <button class="faq-q">How do I message a mentor?<span class="faq-arrow">+</span></button>
+            <div class="faq-a">Once you have a confirmed session, a Message button appears on that session. You can also message from the Messages area. Both you and the mentor can chat back and forth there.</div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-q">What happens after a session?<span class="faq-arrow">+</span></button>
+            <div class="faq-a">After a mentor marks a session as completed, you can leave a rating and an optional comment. Your review helps other learners and updates the mentor's average rating.</div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-q">Can I cancel or change a request?<span class="faq-arrow">+</span></button>
+            <div class="faq-a">A pending request can be declined by the mentor if plans change. For any scheduling changes, use messaging to coordinate directly with your mentor.</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header"><h3>Account and security</h3></div>
+    <div class="faq-list">
+        <div class="faq-item">
+            <button class="faq-q">How do I change my password?<span class="faq-arrow">+</span></button>
+            <div class="faq-a">Go to Settings from the sidebar. Under change password, enter your current password and your new one. For your security, we verify your current password before making the change.</div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-q">How do I delete my account?<span class="faq-arrow">+</span></button>
+            <div class="faq-a">In Settings, you can delete your account. You will be asked to confirm by typing DELETE. This permanently removes your account and cannot be undone.</div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-q">Why do I get a code when I log in?<span class="faq-arrow">+</span></button>
+            <div class="faq-a">Nexora uses two step verification for your security. After entering your password, we email you a six digit code that is valid for ten minutes to confirm it is really you.</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header"><h3>Still need help?</h3></div>
+    <p class="dash-empty" style="margin-bottom:16px;">Our support team is here for you. Reach out and we will respond as soon as we can.</p>
+    <div class="support-contact">
+        <div class="support-item">
+            <i class="fa-solid fa-envelope"></i>
+            <div>
+                <span class="support-label">Email us</span>
+                <span class="support-value">support@nexora.com</span>
+            </div>
+        </div>
+        <div class="support-item">
+            <i class="fa-solid fa-clock"></i>
+            <div>
+                <span class="support-label">Support hours</span>
+                <span class="support-value">Sunday to Friday, 9am to 6pm</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
