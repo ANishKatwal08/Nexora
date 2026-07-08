@@ -23,6 +23,23 @@
                     </div>
                     <span class="req-status status-{{ req.status }}">{{ req.status|capitalize }}</span>
                 </div>
+
+                {% if req.status == 'confirmed' %}
+                    <div class="req-actions">
+                        <a href="{{ url_for('message.conversation', other_id=req.mentor_id) }}" class="btn-outline-msg">Message {{ req.mentor_name }}</a>
+                    </div>
+                {% elif req.status == 'completed' %}
+                    {% if req.feedback %}
+                        <div class="req-actions">
+                            <span class="req-status status-confirmed">You rated {{ req.feedback.rating }} / 5</span>
+                        </div>
+                    {% else %}
+                        <div class="req-actions">
+                            <a href="{{ url_for('message.conversation', other_id=req.mentor_id) }}" class="btn-outline-msg">Message {{ req.mentor_name }}</a>
+                            <button type="button" class="btn" onclick="openReview({{ req.id }}, '{{ req.mentor_name|e }}')">Leave a review</button>
+                        </div>
+                    {% endif %}
+                {% endif %}
             </div>
         {% endfor %}
     </div>
@@ -31,5 +48,79 @@
         <p class="dash-empty">You have not requested any sessions yet. Browse mentors to get started.</p>
     </div>
 {% endif %}
+
+<div class="review-modal-overlay" id="reviewModal">
+    <div class="review-modal">
+        <button type="button" class="review-modal-close" onclick="closeReview()">&times;</button>
+        <h3>Rate your session</h3>
+        <p class="review-modal-sub" id="reviewMentorName"></p>
+
+        <form method="POST" id="reviewForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="star-picker" id="starPicker">
+                <span class="star-pick" data-value="1">&#9733;</span>
+                <span class="star-pick" data-value="2">&#9733;</span>
+                <span class="star-pick" data-value="3">&#9733;</span>
+                <span class="star-pick" data-value="4">&#9733;</span>
+                <span class="star-pick" data-value="5">&#9733;</span>
+            </div>
+            <input type="hidden" name="rating" id="ratingValue" required>
+
+            <textarea name="comment" rows="3" placeholder="Add a comment (optional)" class="review-comment-box"></textarea>
+
+            <button type="submit" class="btn-dash review-submit">Submit review</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const modal = document.getElementById('reviewModal');
+    const form = document.getElementById('reviewForm');
+    const ratingValue = document.getElementById('ratingValue');
+    const stars = document.querySelectorAll('.star-pick');
+
+    function openReview(requestId, mentorName) {
+        form.action = '/session/feedback/' + requestId;
+        document.getElementById('reviewMentorName').textContent = 'How was your session with ' + mentorName + '?';
+        ratingValue.value = '';
+        stars.forEach(s => s.classList.remove('filled'));
+        modal.classList.add('open');
+    }
+
+    function closeReview() {
+        modal.classList.remove('open');
+    }
+
+    stars.forEach(function (star) {
+        star.addEventListener('click', function () {
+            const val = parseInt(star.dataset.value, 10);
+            ratingValue.value = val;
+            stars.forEach(function (s) {
+                s.classList.toggle('filled', parseInt(s.dataset.value, 10) <= val);
+            });
+        });
+        star.addEventListener('mouseenter', function () {
+            const val = parseInt(star.dataset.value, 10);
+            stars.forEach(function (s) {
+                s.classList.toggle('hover', parseInt(s.dataset.value, 10) <= val);
+            });
+        });
+        star.addEventListener('mouseleave', function () {
+            stars.forEach(s => s.classList.remove('hover'));
+        });
+    });
+
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeReview();
+    });
+
+    form.addEventListener('submit', function (e) {
+        if (!ratingValue.value) {
+            e.preventDefault();
+            alert('Please pick a star rating.');
+        }
+    });
+</script>
 
 {% endblock %}
