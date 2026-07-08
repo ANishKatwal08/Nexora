@@ -27,8 +27,8 @@ def dashboard():
         )
 
     elif role == "admin":
-        return render_template("dashboard/admin.html", name=name)
-
+        stats = user_repo.get_platform_stats()
+        return render_template("dashboard/admin.html", name=name, stats=stats)
     else:
         requests = user_repo.get_requests_for_learner(user_id)
         booked = [r for r in requests if r["status"] in ("pending", "confirmed")]

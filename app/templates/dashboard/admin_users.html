@@ -1,0 +1,54 @@
+{% extends "dash_base.html" %}
+{% set active = 'users' %}
+
+{% block title %}Manage users{% endblock %}
+{% block page_title %}Manage users{% endblock %}
+
+{% block dash_content %}
+<div class="card">
+    <div class="card-header"><h3>All users ({{ users|length }})</h3></div>
+
+    <form method="GET" action="{{ url_for('admin.admin_users') }}" class="admin-search">
+        <input type="text" name="q" value="{{ search }}" placeholder="Search by name or email">
+        <button type="submit" class="btn-dash">Search</button>
+    </form>
+
+    {% if users %}
+        <div class="admin-table">
+            <div class="admin-row admin-head">
+                <span>Name</span>
+                <span>Email</span>
+                <span>Role</span>
+                <span>Status</span>
+                <span>Action</span>
+            </div>
+            {% for u in users %}
+                <div class="admin-row">
+                    <span>{{ u.name }}</span>
+                    <span class="admin-email">{{ u.email }}</span>
+                    <span><span class="role-tag role-{{ u.role }}">{{ u.role|capitalize }}</span></span>
+                    <span>
+                        {% if u.is_active %}
+                            <span class="status-dot active">Active</span>
+                        {% else %}
+                            <span class="status-dot inactive">Inactive</span>
+                        {% endif %}
+                    </span>
+                    <span>
+                        <form method="POST" action="{{ url_for('admin.toggle_user', user_id=u.id) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            {% if u.is_active %}
+                                <button type="submit" class="btn-small btn-deactivate">Deactivate</button>
+                            {% else %}
+                                <button type="submit" class="btn-small btn-activate">Activate</button>
+                            {% endif %}
+                        </form>
+                    </span>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="dash-empty">No users found.</p>
+    {% endif %}
+</div>
+{% endblock %}

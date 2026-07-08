@@ -571,3 +571,63 @@ def mark_messages_read(recipient_id, sender_id):
         connection.commit()
     finally:
         connection.close()
+
+def get_platform_stats():
+    """Return counts for the admin dashboard."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT COUNT(*) AS c FROM users WHERE role = 'learner'")
+            learners = cursor.fetchone()["c"]
+            cursor.execute("SELECT COUNT(*) AS c FROM users WHERE role = 'mentor'")
+            mentors = cursor.fetchone()["c"]
+            cursor.execute("SELECT COUNT(*) AS c FROM session_requests")
+            sessions = cursor.fetchone()["c"]
+            cursor.execute("SELECT COUNT(*) AS c FROM feedback")
+            reviews = cursor.fetchone()["c"]
+            return {"learners": learners, "mentors": mentors, "sessions": sessions, "reviews": reviews}
+    finally:
+        connection.close()
+
+
+def get_all_users(search=""):
+    """Return all users, optionally filtered by name or email."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            if search:
+                like = "%" + search + "%"
+                cursor.execute(
+                    """
+                    SELECT id, name, email, role, is_active, created_at
+                    FROM users
+                    WHERE name LIKE %s OR email LIKE %s
+                    ORDER BY created_at DESC
+                    """,
+                    (like, like),
+                )
+            else:
+                cursor.execute(
+                    """
+                    SELECT id, name, email, role, is_active, created_at
+                    FROM users
+                    ORDER BY created_at DESC
+                    """
+                )
+            return cursor.fetchall()
+    finally:
+        connection.close()
+
+
+def set_user_active(user_id, active):
+    """Activate or deactivate a user account."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE users SET is_active = %s WHERE id = %s",
+                (active, user_id),
+            )
+        connection.commit()
+    finally:
+        connection.close()

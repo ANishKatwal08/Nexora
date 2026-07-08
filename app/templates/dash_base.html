@@ -26,15 +26,17 @@
                 <span>Nex<span class="logo-accent">ora</span></span>
             </div>
 
-           
-
             <nav class="menu">
                 <a href="{{ url_for('dashboard.dashboard') }}"
                    class="menu-item {{ 'active' if active == 'dashboard' }}">
                     <i class="fa-solid fa-chart-pie"></i> Dashboard
                 </a>
 
-                {% if session.get('user_role') == 'mentor' %}
+                {% if session.get('user_role') == 'admin' %}
+                    <a href="{{ url_for('admin.admin_users') }}" class="menu-item {{ 'active' if active == 'users' }}">
+                        <i class="fa-solid fa-users-gear"></i> Manage users
+                    </a>
+                {% elif session.get('user_role') == 'mentor' %}
                     <a href="{{ url_for('session.mentor_requests') }}" class="menu-item {{ 'active' if active == 'requests' }}">
                         <i class="fa-solid fa-calendar-days"></i> Requests
                     </a>
@@ -50,10 +52,12 @@
                     </a>
                 {% endif %}
 
-                <a href="{{ url_for('message.inbox') }}" class="menu-item {{ 'active' if active == 'messages' }}">
-                    <i class="fa-solid fa-comments"></i> Messages
-                </a>
-                    
+                {% if session.get('user_role') != 'admin' %}
+                    <a href="{{ url_for('message.inbox') }}" class="menu-item {{ 'active' if active == 'messages' }}">
+                        <i class="fa-solid fa-comments"></i> Messages
+                    </a>
+                {% endif %}
+
                 <hr class="menu-divider">
 
                 <a href="{{ url_for('profile.profile') }}"
@@ -67,7 +71,6 @@
                     <i class="fa-solid fa-circle-question"></i> Help
                 </a>
             </nav>
-            
 
             <div class="sidebar-bottom">
                 <a href="{{ url_for('auth.logout') }}" class="menu-item">
@@ -209,6 +212,7 @@
             });
         })();
     </script>
+
     <script>
         document.querySelectorAll('.faq-q').forEach(function (q) {
             q.addEventListener('click', function () {
@@ -216,5 +220,6 @@
             });
         });
     </script>
+
 </body>
 </html>

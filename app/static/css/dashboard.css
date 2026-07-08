@@ -759,3 +759,41 @@ body.dash-body {
 .support-item div { display: flex; flex-direction: column; }
 .support-label { font-size: 13px; color: var(--text-muted); }
 .support-value { font-size: 15px; font-weight: 600; color: var(--text-main); }
+
+
+/* Admin */
+.admin-search { display: flex; gap: 10px; margin-bottom: 20px; }
+.admin-search input {
+    flex: 1; padding: 11px 16px; border: 1px solid var(--card-border);
+    border-radius: 24px; background: var(--input-bg); color: var(--text-main);
+    font-size: 14px; outline: none;
+}
+.admin-search input:focus { border-color: var(--accent-teal); }
+.admin-table { display: flex; flex-direction: column; }
+.admin-row {
+    display: grid;
+    grid-template-columns: 1.4fr 2fr 1fr 1fr 1.2fr;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 8px;
+    border-bottom: 1px solid var(--card-border);
+    font-size: 14px;
+}
+.admin-head { font-weight: 700; color: var(--text-muted); font-size: 12px; text-transform: uppercase; }
+.admin-email { color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; }
+.role-tag { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+.role-learner { background: var(--accent-active-bg); color: var(--accent-teal); }
+.role-mentor { background: rgba(124, 108, 242, 0.15); color: #7c6cf2; }
+.role-admin { background: rgba(253, 126, 20, 0.15); color: #fd7e14; }
+.status-dot.active { color: var(--accent-teal); font-weight: 600; }
+.status-dot.inactive { color: var(--text-muted); }
+.btn-small { padding: 6px 14px; border-radius: 16px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; }
+.btn-deactivate { background: rgba(241, 65, 108, 0.15); color: var(--danger); }
+.btn-deactivate:hover { background: var(--danger); color: #fff; }
+.btn-activate { background: var(--accent-active-bg); color: var(--accent-teal); }
+.btn-activate:hover { background: var(--accent-teal); color: #fff; }
+
+@media (max-width: 768px) {
+    .admin-row { grid-template-columns: 1fr 1fr; font-size: 13px; }
+    .admin-email { display: none; }
+}
