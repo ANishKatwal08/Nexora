@@ -1,168 +1,211 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexora, learn from mentors who have been there</title>
+    <meta name="description" content="Nexora is a collaborative learning and mentorship platform. Find trusted mentors, book one on one sessions, and grow at your own pace.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
 
-{% block title %}Nexora, learn any skill from a mentor{% endblock %}
-
-{% block content %}
-<section class="hero-banner" style="background-image: url('{{ url_for('static', filename='img/hero.jpg') }}');">
-    <div class="hero-banner-inner">
-        <h1 class="hero-heading">Find the right mentor<br>for any skill</h1>
-
-        <form class="hero-search" action="#" method="get">
-            <input type="text" name="q" class="hero-search-input" placeholder="Search for a skill or topic...">
-            <button type="submit" class="hero-search-btn" aria-label="Search">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-            </button>
-        </form>
-
-        <div class="hero-pills">
-            <a href="#" class="pill">Python</a>
-            <a href="#" class="pill">UI Design</a>
-            <a href="#" class="pill">Public Speaking</a>
-            <a href="#" class="pill">Data Science</a>
-            <a href="#" class="pill">Marketing</a>
-        </div>
-    </div>
-</section>
-
-<section class="categories container">
-    <div class="category-grid">
-        <a href="#" class="category-card reveal">
-            <span class="category-icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="16 18 22 12 16 6"></polyline>
-                    <polyline points="8 6 2 12 8 18"></polyline>
-                </svg>
-            </span>
-            <span class="category-name">Programming &amp; Tech</span>
-        </a>
-
-        <a href="#" class="category-card reveal">
-            <span class="category-icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                </svg>
-            </span>
-            <span class="category-name">Design &amp; Creative</span>
-        </a>
-
-        <a href="#" class="category-card reveal">
-            <span class="category-icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                </svg>
-            </span>
-            <span class="category-name">Business &amp; Marketing</span>
-        </a>
-
-        <a href="#" class="category-card reveal">
-            <span class="category-icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="2" y1="12" x2="22" y2="12"></line>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                </svg>
-            </span>
-            <span class="category-name">Languages</span>
-        </a>
-
-        <a href="#" class="category-card reveal">
-            <span class="category-icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 18V5l12-2v13"></path>
-                    <circle cx="6" cy="18" r="3"></circle>
-                    <circle cx="18" cy="16" r="3"></circle>
-                </svg>
-            </span>
-            <span class="category-name">Music &amp; Audio</span>
-        </a>
-
-        <a href="#" class="category-card reveal">
-            <span class="category-icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                    <polyline points="17 6 23 6 23 12"></polyline>
-                </svg>
-            </span>
-            <span class="category-name">Data &amp; AI</span>
-        </a>
-    </div>
-</section>
-
-<section class="stats">
-    <div class="stats-inner container">
-        <div class="stat reveal">
-            <div class="stat-title">Every skill</div>
-            <div class="stat-text">Mentors across tech, design, business, and more</div>
-        </div>
-        <div class="stat reveal">
-            <div class="stat-title">Solo or group</div>
-            <div class="stat-text">Book one on one or join a group session</div>
-        </div>
-        <div class="stat reveal">
-            <div class="stat-title">Your pace</div>
-            <div class="stat-text">Schedule sessions around your own time</div>
-        </div>
-        <div class="stat reveal">
-            <div class="stat-title">Real feedback</div>
-            <div class="stat-text">Honest reviews after every session</div>
-        </div>
-    </div>
-</section>
-
-<section class="showcase container">
-    <h2 class="showcase-title">Services</h2>
-    <div class="showcase-grid">
-
-        <a href="#" class="tile reveal" style="background-image: url('{{ url_for('static', filename='img/tile-mentor.jpg') }}');">
-            <div class="tile-content">
-                <h3 class="tile-heading">Become a mentor</h3>
-                <p class="tile-sub">Share your skills and earn while you teach.</p>
-                <span class="tile-btn">Get started</span>
+    <!-- NAV -->
+    <header class="nav-wrap">
+        <nav class="nav">
+            <a href="{{ url_for('home') }}" class="brand">Nexora</a>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('browse.browse') }}">Find mentors</a></li>
+                <li><a href="#how">How it works</a></li>
+                <li><a href="{{ url_for('auth.register') }}">Become a mentor</a></li>
+                <li><a href="#stories">Stories</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="{{ url_for('auth.login') }}" class="nav-signin">Sign in</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">Join Nexora</a>
             </div>
-        </a>
+        </nav>
+    </header>
 
-        <a href="#" class="tile reveal" style="background-image: url('{{ url_for('static', filename='img/tile-book.jpg') }}');">
-            <div class="tile-content">
-                <h3 class="tile-heading">Book a session</h3>
-                <p class="tile-sub">Find a mentor and learn at your own pace.</p>
-                <span class="tile-btn">Browse sessions</span>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-media">
+            <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=2000&q=80" alt="A mentor and learner working together in a bright, calm room">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-inner container">
+            <p class="eyebrow">A quieter way to learn</p>
+            <h1 class="hero-title">
+                Learn from people<br>
+                who have <em>actually</em> done it.
+            </h1>
+            <p class="hero-sub">
+                Nexora connects curious learners with trusted mentors across design, engineering,
+                writing, business, and more. One real conversation at a time.
+            </p>
+            <div class="hero-cta">
+                <a href="{{ url_for('browse.browse') }}" class="btn btn-primary">Find a mentor</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-ghost">Become a mentor</a>
             </div>
-        </a>
+        </div>
+    </section>
 
-        <a href="#" class="tile reveal" style="background-image: url('{{ url_for('static', filename='img/tile-group.jpg') }}');">
-            <div class="tile-content">
-                <h3 class="tile-heading">Join group sessions</h3>
-                <p class="tile-sub">Learn together with others who share your goals.</p>
-                <span class="tile-btn">Explore groups</span>
+    <!-- HIGHLIGHTS -->
+    <section class="highlights">
+        <div class="container highlights-row">
+            <div class="highlight">
+                <span class="highlight-dot"></span>
+                <span>Every skill</span>
             </div>
-        </a>
-
-        <a href="#" class="tile reveal" style="background-image: url('{{ url_for('static', filename='img/tile-progress.jpg') }}');">
-            <div class="tile-content">
-                <h3 class="tile-heading">Track your progress</h3>
-                <p class="tile-sub">See your bookings, feedback, and growth in one place.</p>
-                <span class="tile-btn">View dashboard</span>
+            <div class="highlight">
+                <span class="highlight-dot"></span>
+                <span>Verified mentors</span>
             </div>
-        </a>
+            <div class="highlight">
+                <span class="highlight-dot"></span>
+                <span>Learn at your pace</span>
+            </div>
+            <div class="highlight">
+                <span class="highlight-dot"></span>
+                <span>Real feedback</span>
+            </div>
+        </div>
+    </section>
 
-    </div>
-</section>
+    <!-- SPLIT 1: text left, image right -->
+    <section class="split split-light">
+        <div class="container split-grid">
+            <div class="split-copy">
+                <p class="eyebrow">Guided by experience</p>
+                <h2 class="section-title">
+                    A mentor for<br>every question you<br>are afraid to ask.
+                </h2>
+                <p class="section-body">
+                    Nexora is built around honest conversations with people who have walked the path
+                    before you. Whether you are switching careers, sharpening a skill, or starting
+                    something of your own, your mentor helps you think it through, with real advice,
+                    useful context, and a plan you can actually follow.
+                </p>
+                <a href="{{ url_for('browse.browse') }}" class="btn btn-primary">Browse mentors</a>
+            </div>
+            <div class="split-image">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1400&q=80" alt="A portrait of a mentor smiling, thoughtful and calm">
+            </div>
+        </div>
+    </section>
 
-<section class="cta reveal">
-    <div class="cta-inner container">
-        <h2 class="cta-heading">Ready to start learning</h2>
-        <p class="cta-text">Join Nexora today and connect with mentors who can help you grow.</p>
-        <a href="#" class="btn cta-btn">Sign up free</a>
-    </div>
-</section>
+    <!-- SPLIT 2: image left, text right -->
+    <section class="split split-cream">
+        <div class="container split-grid split-reverse">
+            <div class="split-image">
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=80" alt="Two people meeting over a laptop, planning a session together">
+            </div>
+            <div class="split-copy">
+                <p class="eyebrow">One session at a time</p>
+                <h2 class="section-title">
+                    Book a session<br>that fits your week,<br>not the other way around.
+                </h2>
+                <p class="section-body">
+                    Pick a mentor, choose a time that works for you, and meet them over video. Sessions
+                    are short on purpose, usually thirty to sixty minutes, so you leave with something
+                    clear. A next step, a decision, or feedback that finally makes sense.
+                </p>
+                <a href="#how" class="btn btn-outline">See how it works</a>
+            </div>
+        </div>
+    </section>
 
-{% include "partials/footer.html" %}
-{% endblock %}
+    <!-- HOW IT WORKS -->
+    <section id="how" class="how">
+        <div class="container">
+            <div class="how-head">
+                <p class="eyebrow">How Nexora works</p>
+                <h2 class="section-title how-title">Three quiet steps<br>from curious to capable.</h2>
+            </div>
+            <div class="how-grid">
+                <article class="step-card">
+                    <span class="step-num">01</span>
+                    <h3 class="step-title">Browse mentors</h3>
+                    <p class="step-body">
+                        Search by skill, background, or the exact thing you are stuck on.
+                        Read honest reviews from learners like you.
+                    </p>
+                </article>
+                <article class="step-card">
+                    <span class="step-num">02</span>
+                    <h3 class="step-title">Request a session</h3>
+                    <p class="step-body">
+                        Send a short message, pick a time, and confirm once your mentor
+                        accepts. No subscriptions, no surprises.
+                    </p>
+                </article>
+                <article class="step-card">
+                    <span class="step-num">03</span>
+                    <h3 class="step-title">Learn and grow</h3>
+                    <p class="step-body">
+                        Meet over video, message between sessions, and leave a review
+                        that helps the next learner find their person.
+                    </p>
+                </article>
+            </div>
+        </div>
+    </section>
 
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/reveal.js') }}"></script>
-{% endblock %}
+    <!-- CTA -->
+    <section class="cta" id="signup">
+        <div class="cta-media">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2000&q=80" alt="A calm workspace with soft daylight and a cup of coffee">
+            <div class="cta-overlay"></div>
+        </div>
+        <div class="container cta-inner">
+            <h2 class="cta-title">Your next chapter<br>starts with one conversation.</h2>
+            <p class="cta-sub">Join Nexora for free and meet a mentor this week.</p>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Sign up for free</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="{{ url_for('home') }}" class="brand brand-footer">Nexora</a>
+                <p class="footer-tag">A quieter way to learn from people who have done it.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="{{ url_for('browse.browse') }}">Find a mentor</a></li>
+                    <li><a href="{{ url_for('auth.register') }}">Become a mentor</a></li>
+                    <li><a href="#how">How it works</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#stories">Stories</a></li>
+                    <li><a href="#careers">Careers</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#help">Help center</a></li>
+                    <li><a href="#trust">Trust and safety</a></li>
+                    <li><a href="#terms">Terms</a></li>
+                    <li><a href="#privacy">Privacy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>&copy; 2026 Nexora Learning. All rights reserved.</p>
+            <p class="footer-made">Made with care for lifelong learners.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
