@@ -1,91 +1,163 @@
 {% extends "base.html" %}
+{% set hide_nav = true %}
 
 {% block title %}{{ mentor.name }}, mentor on Nexora{% endblock %}
 
+{% block css %}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/mentors.css') }}">
+{% endblock %}
+
 {% block content %}
-<div class="mentor-detail container">
 
-    <a href="{{ url_for('browse.browse') }}" class="detail-back">&larr; Back to browse</a>
-
-    <div class="detail-header card">
-        <div class="detail-avatar avatar-color-{{ mentor.name|length % 8 }}">
-            {% if mentor.avatar_url %}
-                <img src="{{ url_for('static', filename='uploads/' ~ mentor.avatar_url) }}" alt="{{ mentor.name }}">
+<header class="site-bar">
+    <div class="bar-inner">
+        <a href="{{ url_for('home') }}" class="brand">Nexora</a>
+        <nav class="bar-nav">
+            <a href="{{ url_for('browse.browse') }}" class="bar-link">Browse</a>
+            {% if session.get('user_id') %}
+                <a href="{{ url_for('dashboard.dashboard') }}" class="bar-link">Dashboard</a>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-primary btn-sm">Log out</a>
             {% else %}
-                <span>{{ mentor.name[0]|upper }}</span>
+                <a href="{{ url_for('auth.login') }}" class="bar-link">Sign in</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">Register</a>
             {% endif %}
-        </div>
-        <div class="detail-head-info">
-            <h1>{{ mentor.name }}</h1>
-            <p class="detail-profession">{{ mentor.profession or "Mentor" }}</p>
-            {% if mentor.headline %}<p class="detail-headline">{{ mentor.headline }}</p>{% endif %}
-            <div class="detail-meta">
-                {% if mentor.rating and mentor.rating > 0 %}
-                    <span class="detail-rating"><span class="star">&#9733;</span> {{ "%.1f"|format(mentor.rating) }}</span>
+        </nav>
+    </div>
+</header>
+
+<div class="container back-row">
+    <a href="{{ url_for('browse.browse') }}" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        <span>Back to browse</span>
+    </a>
+</div>
+
+<section class="container">
+    <article class="profile-card">
+        <div class="profile-strip" style="--strip:#6a8895"></div>
+        <div class="profile-inner">
+            <div class="profile-left">
+                {% if mentor.avatar_url %}
+                    <img class="profile-avatar" src="{{ url_for('static', filename='uploads/' ~ mentor.avatar_url) }}" alt="{{ mentor.name }}">
+                {% else %}
+                    <div class="profile-avatar profile-avatar-letter">{{ mentor.name[0]|upper }}</div>
                 {% endif %}
-                {% if mentor.years_experience %}<span>{{ mentor.years_experience }} yrs experience</span>{% endif %}
-                {% if mentor.hourly_rate %}<span>${{ mentor.hourly_rate }} / hour</span>{% endif %}
+                <div class="profile-meta">
+                    <p class="eyebrow">Mentor</p>
+                    <h1 class="profile-name">{{ mentor.name }}</h1>
+                    <p class="profile-role">{{ mentor.profession or "Mentor on Nexora" }}</p>
+                    {% if mentor.rating and mentor.rating > 0 %}
+                        <div class="rating rating-lg">
+                            <span class="star">&#9733;</span>
+                            <span class="rating-num">{{ "%.1f"|format(mentor.rating) }}</span>
+                            {% if reviews %}<span class="rating-count">&middot; {{ reviews|length }} review{{ 's' if reviews|length != 1 }}</span>{% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="profile-actions">
+                {% if session.get('user_id') and session.get('user_role') == 'learner' %}
+                    <form method="POST" action="{{ url_for('session.request_session', mentor_id=mentor.id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-primary btn-block">Request a session</button>
+                    </form>
+                    <a href="{{ url_for('message.conversation', other_id=mentor.id) }}" class="btn btn-outline">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Message
+                    </a>
+                {% elif not session.get('user_id') %}
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-block">Log in to request</a>
+                {% endif %}
+                {% if mentor.hourly_rate %}<p class="rate-note"><span>${{ mentor.hourly_rate }}</span> per hour</p>{% endif %}
             </div>
         </div>
-        <div class="detail-action">
-            {% if session.get('user_id') and session.get('user_role') == 'learner' %}
-                <form method="POST" action="{{ url_for('session.request_session', mentor_id=mentor.id) }}">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <button type="submit" class="btn">Request a session</button>
-                </form>
-                <a href="{{ url_for('message.conversation', other_id=mentor.id) }}" class="btn-outline" style="margin-top:10px; display:inline-block;">Message</a>
-            {% elif not session.get('user_id') %}
-                <a href="{{ url_for('auth.login') }}" class="btn">Log in to request</a>
-            {% endif %}
-        </div>
-    </div>
+    </article>
+</section>
 
-    <div class="detail-grid">
-        <div class="detail-main">
-            {% if mentor.bio %}
-                <div class="card detail-section">
-                    <h2>About</h2>
+<section class="container content-layout">
+
+    <div class="content-main">
+
+        {% if mentor.bio %}
+            <article class="panel">
+                <h2 class="panel-title">About</h2>
+                <div class="panel-body">
                     <p>{{ mentor.bio }}</p>
                 </div>
-            {% endif %}
+            </article>
+        {% endif %}
 
-            <div class="card detail-section">
-                <h2>Reviews {% if reviews %}({{ reviews|length }}){% endif %}</h2>
+        <article class="panel">
+            <div class="panel-head">
+                <h2 class="panel-title">Reviews {% if reviews %}<span class="panel-count">&middot; {{ reviews|length }}</span>{% endif %}</h2>
+                {% if mentor.rating and mentor.rating > 0 %}
+                    <div class="rating">
+                        <span class="star">&#9733;</span>
+                        <span class="rating-num">{{ "%.1f"|format(mentor.rating) }}</span>
+                        <span class="rating-count">overall</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="panel-body">
                 {% if reviews %}
-                    <div class="review-list">
-                        {% for review in reviews %}
-                            <div class="review-item">
-                                <div class="review-top">
-                                    <span class="review-name">{{ review.learner_name }}</span>
-                                    <span class="review-stars">
-                                        {% for i in range(review.rating) %}&#9733;{% endfor %}{% for i in range(5 - review.rating) %}&#9734;{% endfor %}
-                                    </span>
+                    {% for review in reviews %}
+                        <div class="review">
+                            <div class="review-head">
+                                <div class="review-who">
+                                    <div class="review-avatar" style="--avatar:#6a8895">{{ review.learner_name[0]|upper }}</div>
+                                    <div>
+                                        <p class="review-name">{{ review.learner_name }}</p>
+                                        <p class="review-when">Learner</p>
+                                    </div>
                                 </div>
-                                {% if review.comment %}<p class="review-comment">{{ review.comment }}</p>{% endif %}
+                                <div class="stars small">
+                                    {% for i in range(review.rating) %}<span class="star">&#9733;</span>{% endfor %}{% for i in range(5 - review.rating) %}<span class="star muted">&#9733;</span>{% endfor %}
+                                </div>
                             </div>
-                        {% endfor %}
-                    </div>
+                            {% if review.comment %}<p class="review-text">{{ review.comment }}</p>{% endif %}
+                        </div>
+                    {% endfor %}
                 {% else %}
-                    <p class="detail-empty">No reviews yet.</p>
+                    <p class="dash-empty">No reviews yet. Be the first to book a session.</p>
                 {% endif %}
             </div>
-        </div>
+        </article>
 
-        <div class="detail-side">
-            <div class="card detail-section">
-                <h2>Skills</h2>
-                {% if skills %}
-                    <div class="mentor-skills">
-                        {% for skill in skills %}
-                            <span class="mentor-skill-tag">{{ skill.name }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <p class="detail-empty">No skills listed yet.</p>
-                {% endif %}
-            </div>
-        </div>
     </div>
 
-</div>
+    <aside class="content-aside">
+
+        <article class="panel">
+            <h2 class="panel-title">Skills</h2>
+            {% if skills %}
+                <ul class="skill-list">
+                    {% for skill in skills %}
+                        <li>{{ skill.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="dash-empty">No skills listed yet.</p>
+            {% endif %}
+        </article>
+
+        {% if mentor.years_experience %}
+            <article class="panel">
+                <h2 class="panel-title">Experience</h2>
+                <p class="avail-line">{{ mentor.years_experience }} year{{ 's' if mentor.years_experience != 1 }} of experience</p>
+            </article>
+        {% endif %}
+
+    </aside>
+
+</section>
+
+<footer class="site-foot">
+    <div class="container foot-inner">
+        <p>Copyright 2026 Nexora Learning</p>
+        <p><a href="#terms">Terms</a> &nbsp;&middot;&nbsp; <a href="#privacy">Privacy</a></p>
+    </div>
+</footer>
+
 {% endblock %}
