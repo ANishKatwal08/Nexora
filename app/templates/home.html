@@ -20,7 +20,7 @@
                 <li><a href="{{ url_for('browse.browse') }}">Find mentors</a></li>
                 <li><a href="#how">How it works</a></li>
                 <li><a href="{{ url_for('auth.register') }}">Become a mentor</a></li>
-                <li><a href="#stories">Stories</a></li>
+                
             </ul>
             <div class="nav-actions">
                 <a href="{{ url_for('auth.login') }}" class="nav-signin">Sign in</a>
@@ -168,44 +168,27 @@
 
     <!-- FOOTER -->
     <footer class="footer">
-        <div class="container footer-grid">
-            <div class="footer-brand">
-                <a href="{{ url_for('home') }}" class="brand brand-footer">Nexora</a>
-                <p class="footer-tag">A quieter way to learn from people who have done it.</p>
+        <div class="container footer-center">
+            <a href="{{ url_for('home') }}" class="brand brand-footer">Nexora</a>
+            <p class="footer-tag">A quieter way to learn from people who have done it.</p>
+
+            <ul class="footer-links">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('browse.browse') }}">Find a mentor</a></li>
+                <li><a href="{{ url_for('auth.register') }}">Become a mentor</a></li>
+                <li><a href="#how">How it works</a></li>
+                <li><a href="{{ url_for('pages.about') }}">About</a></li>
+                <li><a href="{{ url_for('pages.contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('help.help_page') }}">Help center</a></li>
+                <li><a href="{{ url_for('pages.terms') }}">Terms</a></li>
+                <li><a href="{{ url_for('pages.privacy') }}">Privacy</a></li>
+            </ul>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom-center">
+                <p>&copy; 2026 Nexora Learning. All rights reserved.</p>
+                <p class="footer-made">Made with care for lifelong learners.</p>
             </div>
-            <div class="footer-col">
-                <h4>Platform</h4>
-                <ul>
-                    <li><a href="{{ url_for('browse.browse') }}">Find a mentor</a></li>
-                    <li><a href="{{ url_for('auth.register') }}">Become a mentor</a></li>
-                    <li><a href="#how">How it works</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#stories">Stories</a></li>
-                    <li><a href="#careers">Careers</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Support</h4>
-                <ul>
-                    <li><a href="#help">Help center</a></li>
-                    <li><a href="#trust">Trust and safety</a></li>
-                    <li><a href="#terms">Terms</a></li>
-                    <li><a href="#privacy">Privacy</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="container footer-bottom">
-            <p>&copy; 2026 Nexora Learning. All rights reserved.</p>
-            <p class="footer-made">Made with care for lifelong learners.</p>
         </div>
     </footer>
-
-</body>
-</html>
