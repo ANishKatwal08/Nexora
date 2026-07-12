@@ -113,8 +113,13 @@
                             </button>
                         </div>
                     </div>
+                    <label class="terms-check">
+                        <input type="checkbox" name="agree_terms" required>
+                        <span>I agree to the <a href="{{ url_for('pages.terms') }}" target="_blank">Terms</a> and <a href="{{ url_for('pages.privacy') }}" target="_blank">Privacy Policy</a>.</span>
+                    </label>
 
                     <button type="submit" class="btn btn-primary btn-block">Create account</button>
+                    
 
                     <p class="form-foot">
                         Already have an account?

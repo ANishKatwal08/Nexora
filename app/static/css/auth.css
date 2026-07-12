@@ -677,3 +677,26 @@ ul { list-style: none; }
 .role-option input:focus-visible + .role-card {
     border-color: var(--focus);
 }
+
+.terms-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: var(--muted, #5a6b74);
+    cursor: pointer;
+}
+.terms-check input {
+    margin-top: 3px;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--ink, #142430);
+    flex-shrink: 0;
+    cursor: pointer;
+}
+.terms-check a {
+    color: var(--ink, #142430);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
