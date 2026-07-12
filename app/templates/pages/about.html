@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Nexora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+</head>
+<body>
+    <header class="nav-wrap">
+        <nav class="nav">
+            <a href="{{ url_for('home') }}" class="brand">Nexora</a>
+            <div class="nav-actions">
+                <a href="{{ url_for('auth.login') }}" class="nav-signin">Sign in</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">Join Nexora</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-wrap">
+        <div class="page-inner">
+            <p class="eyebrow">About Nexora</p>
+            <h1 class="page-title">A quieter way to learn.</h1>
+
+            <p>Nexora is a collaborative learning and mentorship platform. We connect curious learners with trusted mentors across a wide range of skills, from design and engineering to writing, business, and languages.</p>
+
+            <p>The idea behind Nexora is simple. The fastest way to grow is to learn from someone who has already walked the path. Instead of long courses or endless videos, Nexora is built around real conversations, one session at a time, with people who have genuine experience to share.</p>
+
+            <p>Learners can browse mentors, read honest reviews, request a session, and message their mentor directly. Mentors can share what they know, set up their profile, and build a reputation through real feedback. Every session ends with a review, so the community stays honest and helpful.</p>
+
+            <p>We believe learning should feel personal, calm, and human. That is what Nexora is here to make possible.</p>
+
+            <a href="{{ url_for('browse.browse') }}" class="btn btn-primary" style="margin-top: 20px;">Find a mentor</a>
+        </div>
+    </main>
+
+    {% include "pages/page_footer.html" %}
+</body>
+</html>

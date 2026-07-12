@@ -103,6 +103,9 @@ def create_app():
     from app.routes.helpRoutes import bp as help_bp
     app.register_blueprint(help_bp)
 
+    from app.routes.pagesRoutes import bp as pages_bp
+    app.register_blueprint(pages_bp)
+
     @app.route("/")
     def home():
         return render_template("home.html")

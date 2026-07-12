@@ -1,0 +1,56 @@
+.page-wrap {
+    background: var(--cream-2, #fbf9f4);
+    min-height: 70vh;
+    padding: 80px 24px;
+}
+.page-inner {
+    max-width: 760px;
+    margin: 0 auto;
+}
+.page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 48px);
+    color: var(--ink, #142430);
+    margin: 8px 0 16px;
+    line-height: 1.1;
+}
+.page-updated {
+    color: var(--muted, #5a6b74);
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+.page-inner h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--ink, #142430);
+    margin: 30px 0 10px;
+}
+.page-inner p {
+    color: var(--text, #2b3a43);
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+.page-inner a {
+    color: var(--ink, #142430);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.contact-box {
+    background: #fff;
+    border: 1px solid var(--line, #e3e0d8);
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+}
+.contact-label {
+    font-size: 13px;
+    color: var(--muted, #5a6b74);
+    margin-bottom: 4px;
+}
+.contact-value {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink, #142430);
+    margin-bottom: 0;
+}

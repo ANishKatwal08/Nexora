@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Nexora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+</head>
+<body>
+    <header class="nav-wrap">
+        <nav class="nav">
+            <a href="{{ url_for('home') }}" class="brand">Nexora</a>
+            <div class="nav-actions">
+                <a href="{{ url_for('auth.login') }}" class="nav-signin">Sign in</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">Join Nexora</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-wrap">
+        <div class="page-inner">
+            <p class="eyebrow">Contact us</p>
+            <h1 class="page-title">We would love to hear from you.</h1>
+
+            <p>Whether you have a question, need help with your account, or just want to share some feedback, our team is here for you.</p>
+
+            <div class="contact-box">
+                <p class="contact-label">Email</p>
+                <p class="contact-value">teamnexora.org@gmail.com</p>
+            </div>
+
+            <div class="contact-box">
+                <p class="contact-label">Support hours</p>
+                <p class="contact-value">Sunday to Friday, 9am to 6pm</p>
+            </div>
+
+            <p>You can also visit our <a href="{{ url_for('help.help_page') }}">help center</a> for answers to common questions.</p>
+        </div>
+    </main>
+
+    {% include "pages/page_footer.html" %}
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service, Nexora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+</head>
+<body>
+    <header class="nav-wrap">
+        <nav class="nav">
+            <a href="{{ url_for('home') }}" class="brand">Nexora</a>
+            <div class="nav-actions">
+                <a href="{{ url_for('auth.login') }}" class="nav-signin">Sign in</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">Join Nexora</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-wrap">
+        <div class="page-inner">
+            <p class="eyebrow">Legal</p>
+            <h1 class="page-title">Terms of Service</h1>
+            <p class="page-updated">Last updated January 2026</p>
+
+            <h2>1. Acceptance of terms</h2>
+            <p>By creating an account or using Nexora, you agree to these terms. If you do not agree, please do not use the platform.</p>
+
+            <h2>2. Using Nexora</h2>
+            <p>Nexora connects learners with mentors for educational sessions. You agree to use the platform respectfully and lawfully, and to provide accurate information when you register.</p>
+
+            <h2>3. Accounts</h2>
+            <p>You are responsible for keeping your account details secure. You must not share your password or let others use your account. You must be old enough to form a binding agreement in your country to use Nexora.</p>
+
+            <h2>4. Sessions and conduct</h2>
+            <p>Mentors and learners agree to treat each other with respect. Nexora is not responsible for the content of individual sessions, but we may suspend accounts that behave abusively or dishonestly.</p>
+
+            <h2>5. Reviews</h2>
+            <p>Reviews must be honest and based on real sessions. We may remove reviews that are false, abusive, or violate our community standards.</p>
+
+            <h2>6. Changes to these terms</h2>
+            <p>We may update these terms from time to time. If we make significant changes, we will let you know. Continuing to use Nexora means you accept the updated terms.</p>
+
+            <h2>7. Contact</h2>
+            <p>If you have questions about these terms, please reach us at teamnexora.org@gmail.com.</p>
+        </div>
+    </main>
+
+    {% include "pages/page_footer.html" %}
+</body>
+</html>
