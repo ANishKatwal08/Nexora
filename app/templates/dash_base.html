@@ -27,6 +27,9 @@
             </div>
 
             <nav class="menu">
+                <a href="{{ url_for('home') }}" class="menu-item">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
                 <a href="{{ url_for('dashboard.dashboard') }}"
                    class="menu-item {{ 'active' if active == 'dashboard' }}">
                     <i class="fa-solid fa-chart-pie"></i> Dashboard
