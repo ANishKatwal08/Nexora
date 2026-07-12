@@ -23,6 +23,7 @@ def request_session(mentor_id):
     flash("Your session request was sent to " + mentor["name"] + ".", "success")
     return redirect(url_for("browse.browse"))
 
+
 @role_required("mentor")
 def mentor_requests():
     mentor_id = session["user_id"]
@@ -53,11 +54,40 @@ def respond_request(request_id):
         flash("Session marked as completed.", "success")
 
     return redirect(url_for("session.mentor_requests"))
+
+
 @login_required
 def my_requests():
     if session.get("user_role") != "learner":
         return redirect(url_for("dashboard.dashboard"))
     learner_id = session["user_id"]
     requests_list = user_repo.get_requests_for_learner(learner_id)
+    for req in requests_list:
+        req["feedback"] = user_repo.get_feedback_for_request(req["id"])
     return render_template("dashboard/my_requests.html", requests=requests_list)
 
+
+@login_required
+def leave_feedback(request_id):
+    if session.get("user_role") != "learner":
+        return redirect(url_for("dashboard.dashboard"))
+
+    req = user_repo.get_request_by_id(request_id)
+    if not req or req["learner_id"] != session["user_id"] or req["status"] != "completed":
+        flash("You can only review your own completed sessions.", "danger")
+        return redirect(url_for("session.my_requests"))
+
+    if user_repo.get_feedback_for_request(request_id):
+        flash("You have already reviewed this session.", "danger")
+        return redirect(url_for("session.my_requests"))
+
+    rating = request.form.get("rating")
+    comment = request.form.get("comment", "").strip()
+
+    if not rating or not rating.isdigit() or int(rating) < 1 or int(rating) > 5:
+        flash("Please give a rating between 1 and 5.", "danger")
+        return redirect(url_for("session.my_requests"))
+
+    user_repo.create_feedback(request_id, session["user_id"], req["mentor_id"], int(rating), comment)
+    flash("Thanks for your review.", "success")
+    return redirect(url_for("session.my_requests"))

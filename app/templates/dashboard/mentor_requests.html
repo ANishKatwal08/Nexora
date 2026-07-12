@@ -40,6 +40,7 @@
                     </div>
                 {% elif req.status == 'confirmed' %}
                     <div class="req-actions">
+                        <a href="{{ url_for('message.conversation', other_id=req.learner_id) }}" class="btn-outline-msg">Message {{ req.learner_name }}</a>
                         <form method="POST" action="{{ url_for('session.respond_request', request_id=req.id) }}">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="action" value="complete">

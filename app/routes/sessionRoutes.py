@@ -9,5 +9,7 @@ def register_routes():
     bp.add_url_rule("/mentor/requests", view_func=sessionController.mentor_requests, methods=["GET"])
     bp.add_url_rule("/session/respond/<int:request_id>", view_func=sessionController.respond_request, methods=["POST"])
     bp.add_url_rule("/my/requests", view_func=sessionController.my_requests, methods=["GET"])
+    bp.add_url_rule("/session/feedback/<int:request_id>", view_func=sessionController.leave_feedback, methods=["POST"])
+
 
 register_routes()
