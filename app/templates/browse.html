@@ -2,7 +2,14 @@
 
 {% block title %}Find a mentor{% endblock %}
 
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
 {% block content %}
+<script>document.body.classList.add('browse-glass');</script>
+
 <div class="browse-hero">
     <div class="container">
         <h1>Find your mentor</h1>
