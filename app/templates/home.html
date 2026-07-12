@@ -17,14 +17,29 @@
         <nav class="nav">
             <a href="{{ url_for('home') }}" class="brand">Nexora</a>
             <ul class="nav-links">
-                <li><a href="{{ url_for('browse.browse') }}">Find mentors</a></li>
-                <li><a href="#how">How it works</a></li>
-                <li><a href="{{ url_for('auth.register') }}">Become a mentor</a></li>
-                
+                {% if session.get('user_id') %}
+                    <li><a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+                    {% if session.get('user_role') == 'mentor' %}
+                        <li><a href="{{ url_for('session.mentor_requests') }}">Requests</a></li>
+                    {% elif session.get('user_role') == 'learner' %}
+                        <li><a href="{{ url_for('browse.browse') }}">Find mentors</a></li>
+                        <li><a href="{{ url_for('session.my_requests') }}">My requests</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('message.inbox') }}">Messages</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('browse.browse') }}">Find mentors</a></li>
+                    <li><a href="#how">How it works</a></li>
+                    <li><a href="{{ url_for('auth.register') }}">Become a mentor</a></li>
+                {% endif %}
             </ul>
             <div class="nav-actions">
-                <a href="{{ url_for('auth.login') }}" class="nav-signin">Sign in</a>
-                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">Join Nexora</a>
+                {% if session.get('user_id') %}
+                    <span class="nav-username">Hi, {{ session.get('user_name') }}</span>
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-primary btn-sm">Log out</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="nav-signin">Sign in</a>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">Join Nexora</a>
+                {% endif %}
             </div>
         </nav>
     </header>

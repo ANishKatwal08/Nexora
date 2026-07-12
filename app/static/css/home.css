@@ -810,3 +810,10 @@ body {
     font-style: italic;
     font-family: 'Playfair Display', serif;
 }
+
+.nav-username {
+    font-size: 15px;
+    font-weight: 500;
+    color: #ffffff;
+    margin-right: 4px;
+}
