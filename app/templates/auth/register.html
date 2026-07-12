@@ -1,83 +1,150 @@
 {% extends "base.html" %}
 {% set hide_nav = true %}
 
-{% block title %}Sign up for Nexora{% endblock %}
+{% block title %}Create your account on Nexora{% endblock %}
 
-{% block content %}
-<div class="auth-split">
-    <div class="auth-visual" style="background-image: url('{{ url_for('static', filename='img/auth.jpg') }}');">
-        <div class="auth-visual-overlay"></div>
-        <div class="auth-visual-text">
-            <p class="auth-tagline">Share what you know, learn what you do not</p>
-            <h2 class="auth-visual-heading">Join<br>Nexora</h2>
-        </div>
-    </div>
-
-    <div class="auth-form-side">
-        <div class="auth-form-top">
-            <a href="{{ url_for('home') }}" class="auth-logo">Nexora</a>
-            <span class="auth-top-link">Have an account? <a href="{{ url_for('auth.login') }}">Sign in</a></span>
-        </div>
-
-        <div class="auth-form-main">
-            <h1 class="auth-heading">Create account</h1>
-
-            <form method="POST" action="{{ url_for('auth.register') }}">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <div class="field">
-                    <input type="text" id="name" name="name" placeholder="Full name" required>
-                </div>
-
-                <div class="field">
-                    <input type="text" id="username" name="username" placeholder="Username" required>
-                </div>
-
-                <div class="field">
-                    <input type="email" id="email" name="email" placeholder="Email" required>
-                </div>
-
-                <div class="field">
-                    <input type="text" id="phone" name="phone" placeholder="Phone (optional)">
-                </div>
-
-                <div class="field">
-                    <select id="role" name="role">
-                        <option value="learner">Join as a learner</option>
-                        <option value="mentor">Join as a mentor</option>
-                    </select>
-                </div>
-
-                <div class="field field-password">
-                    <input type="password" id="password" name="password" placeholder="Password" required>
-                    <button type="button" class="toggle-password" data-target="password" aria-label="Show password">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                    </button>
-                </div>
-
-                <div class="field field-password">
-                    <input type="password" id="confirm" name="confirm" placeholder="Confirm password" required>
-                    <button type="button" class="toggle-password" data-target="confirm" aria-label="Show password">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                    </button>
-                </div>
-
-                <button type="submit" class="btn auth-submit">Create account</button>
-            </form>
-        </div>
-
-        <div class="auth-form-bottom">
-            <span>Copyright 2026 Nexora</span>
-        </div>
-    </div>
-</div>
+{% block css %}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
 {% endblock %}
 
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% block content %}
+<div class="auth-shell">
+
+    <aside class="auth-media" aria-hidden="true">
+        <img src="{{ url_for('static', filename='img/auth.jpg') }}" alt="">
+        <div class="auth-media-overlay"></div>
+        <div class="auth-media-caption">
+            <p class="media-eyebrow">Nexora journal</p>
+            <p class="media-quote">
+                I joined to learn Python and stayed for the people.
+                My mentor felt more like a friend by our third session.
+            </p>
+            <p class="media-attr">Luca, aspiring engineer</p>
+        </div>
+    </aside>
+
+    <main class="auth-panel">
+
+        <header class="auth-bar">
+            <a href="{{ url_for('home') }}" class="auth-brand">Nexora</a>
+            <nav class="auth-bar-actions">
+                <a href="{{ url_for('auth.login') }}" class="bar-link">Sign in</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm is-active">Register</a>
+            </nav>
+        </header>
+
+        <section class="auth-card">
+            <div class="auth-card-inner">
+
+                <p class="eyebrow">Start with Nexora</p>
+                <h1 class="auth-title">Create your account.</h1>
+                <p class="auth-sub">
+                    A few details and you are in. Join as a learner to find mentors,
+                    or as a mentor to share what you know.
+                </p>
+
+                <form class="auth-form" method="POST" action="{{ url_for('auth.register') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="name">Full name</label>
+                            <input type="text" id="name" name="name" placeholder="Your full name" autocomplete="name" required>
+                        </div>
+                        <div class="field">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" placeholder="Pick a username" autocomplete="username" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-label-row">
+                            <label for="phone">Phone</label>
+                            <span class="field-hint">Optional</span>
+                        </div>
+                        <input type="tel" id="phone" name="phone" placeholder="Your phone number" autocomplete="tel">
+                    </div>
+
+                    <div class="field">
+                        <label>Join as</label>
+                        <div class="role-choice">
+                            <label class="role-option">
+                                <input type="radio" name="role" value="learner" checked>
+                                <span class="role-card">
+                                    <span class="role-name">A learner</span>
+                                    <span class="role-desc">I want to find mentors</span>
+                                </span>
+                            </label>
+                            <label class="role-option">
+                                <input type="radio" name="role" value="mentor">
+                                <span class="role-card">
+                                    <span class="role-name">A mentor</span>
+                                    <span class="role-desc">I want to teach</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <div class="input-with-toggle">
+                            <input type="password" id="password" name="password" placeholder="Create a strong password" autocomplete="new-password" required minlength="8">
+                            <button type="button" class="toggle-password" data-target="password" aria-label="Show password">
+                                <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                                <svg class="eye-closed" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a19.6 19.6 0 0 1 4.22-5.19"/><path d="M22.54 12.88A19.55 19.55 0 0 0 23 12s-4-7-11-7a10.9 10.9 0 0 0-2.79.36"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 7 11 7a19.34 19.34 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                            </button>
+                        </div>
+                        <p class="field-help">At least 8 characters. Mix letters, numbers, or symbols.</p>
+                    </div>
+
+                    <div class="field">
+                        <label for="confirm">Confirm password</label>
+                        <div class="input-with-toggle">
+                            <input type="password" id="confirm" name="confirm" placeholder="Type your password again" autocomplete="new-password" required minlength="8">
+                            <button type="button" class="toggle-password" data-target="confirm" aria-label="Show password">
+                                <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                                <svg class="eye-closed" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a19.6 19.6 0 0 1 4.22-5.19"/><path d="M22.54 12.88A19.55 19.55 0 0 0 23 12s-4-7-11-7a10.9 10.9 0 0 0-2.79.36"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 7 11 7a19.34 19.34 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Create account</button>
+
+                    <p class="form-foot">
+                        Already have an account?
+                        <a href="{{ url_for('auth.login') }}">Sign in</a>
+                    </p>
+
+                </form>
+
+            </div>
+        </section>
+
+        <footer class="auth-foot">
+            <p>Copyright 2026 Nexora Learning</p>
+            <p><a href="#terms">Terms</a> &nbsp;&middot;&nbsp; <a href="#privacy">Privacy</a></p>
+        </footer>
+
+    </main>
+
+</div>
+
+<script>
+    document.querySelectorAll('.toggle-password').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var input = document.getElementById(btn.dataset.target);
+            if (!input) return;
+            var isHidden = input.type === 'password';
+            input.type = isHidden ? 'text' : 'password';
+            btn.classList.toggle('is-showing', isHidden);
+            btn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+        });
+    });
+</script>
 {% endblock %}
