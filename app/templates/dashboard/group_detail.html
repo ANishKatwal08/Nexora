@@ -1,0 +1,52 @@
+{% extends "dash_base.html" %}
+{% set active = 'groups' %}
+
+{% block title %}{{ group.title }}{% endblock %}
+{% block page_title %}Group session{% endblock %}
+
+{% block dash_content %}
+<div class="card">
+    <div class="card-header"><h3>{{ group.title }}</h3></div>
+
+    <p class="group-host">Hosted by {{ group.mentor_name }}</p>
+    {% if group.skill_name %}<span class="group-skill">{{ group.skill_name }}</span>{% endif %}
+    {% if group.description %}<p class="group-desc" style="margin-top:14px;">{{ group.description }}</p>{% endif %}
+    {% if group.scheduled_at %}<p class="group-time">Scheduled for {{ group.scheduled_at }}</p>{% endif %}
+
+    <p class="group-count" style="margin-top:14px;">{{ group.joined_count }} / {{ group.capacity }} learners joined</p>
+
+    {% if session.get('user_role') == 'learner' %}
+        <div class="req-actions" style="margin-top:16px;">
+            {% if joined %}
+                <form method="POST" action="{{ url_for('group.leave_group', session_id=group.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn-outline-msg">Leave session</button>
+                </form>
+            {% elif is_full %}
+                <span class="group-badge full">This session is full</span>
+            {% else %}
+                <form method="POST" action="{{ url_for('group.join_group', session_id=group.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn-dash">Join this session</button>
+                </form>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <div class="card-header"><h3>Who is joining ({{ participants|length }})</h3></div>
+    {% if participants %}
+        <div class="participant-list">
+            {% for p in participants %}
+                <div class="participant">
+                    <div class="participant-avatar">{{ p.name[0]|upper }}</div>
+                    <span>{{ p.name }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="dash-empty">No one has joined yet. Be the first.</p>
+    {% endif %}
+</div>
+{% endblock %}

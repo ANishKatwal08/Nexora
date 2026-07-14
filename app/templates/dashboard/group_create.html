@@ -1,0 +1,46 @@
+{% extends "dash_base.html" %}
+{% set active = 'groups' %}
+
+{% block title %}Create a group session{% endblock %}
+{% block page_title %}Create a group session{% endblock %}
+
+{% block dash_content %}
+<div class="card profile-card">
+    <div class="card-header"><h3>New group session</h3></div>
+    <form method="POST" action="{{ url_for('group.create_group') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="field">
+            <label class="field-label" for="title">Title</label>
+            <input type="text" id="title" name="title" placeholder="For example, Intro to Python for beginners" required>
+        </div>
+
+        <div class="field">
+            <label class="field-label" for="description">Description</label>
+            <textarea id="description" name="description" rows="3" placeholder="What will this session cover?"></textarea>
+        </div>
+
+        <div class="field">
+            <label class="field-label" for="skill_id">Skill</label>
+            <select name="skill_id" id="skill_id">
+                <option value="">General</option>
+                {% for skill in all_skills %}
+                    <option value="{{ skill.id }}">{{ skill.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="field">
+            <label class="field-label" for="capacity">Capacity</label>
+            <input type="number" id="capacity" name="capacity" value="5" min="1" max="100">
+        </div>
+
+        <div class="field">
+            <label class="field-label" for="scheduled_at">Date and time</label>
+            <input type="datetime-local" id="scheduled_at" name="scheduled_at">
+        </div>
+
+        <button type="submit" class="btn-dash">Create session</button>
+    </form>
+</div>
+{% endblock %}

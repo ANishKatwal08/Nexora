@@ -1,0 +1,38 @@
+{% extends "dash_base.html" %}
+{% set active = 'groups' %}
+
+{% block title %}Group sessions{% endblock %}
+{% block page_title %}Group sessions{% endblock %}
+
+{% block dash_content %}
+<div class="card">
+    <div class="card-header"><h3>Open group sessions</h3></div>
+    {% if sessions %}
+        <div class="group-grid">
+            {% for s in sessions %}
+                <div class="group-card">
+                    <div class="group-card-top">
+                        <h4><a href="{{ url_for('group.group_detail', session_id=s.id) }}">{{ s.title }}</a></h4>
+                        {% if s.skill_name %}<span class="group-skill">{{ s.skill_name }}</span>{% endif %}
+                    </div>
+                    <p class="group-host">Hosted by {{ s.mentor_name }}</p>
+                    {% if s.description %}<p class="group-desc">{{ s.description }}</p>{% endif %}
+                    {% if s.scheduled_at %}<p class="group-time">{{ s.scheduled_at }}</p>{% endif %}
+                    <div class="group-card-foot">
+                        <span class="group-count">{{ s.joined_count }} / {{ s.capacity }} joined</span>
+                        {% if s.joined %}
+                            <span class="group-badge joined">Joined</span>
+                        {% elif s.is_full %}
+                            <span class="group-badge full">Full</span>
+                        {% else %}
+                            <a href="{{ url_for('group.group_detail', session_id=s.id) }}" class="btn-dash">View</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="dash-empty">No open group sessions right now. Check back soon.</p>
+    {% endif %}
+</div>
+{% endblock %}

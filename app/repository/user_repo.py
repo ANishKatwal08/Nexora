@@ -662,3 +662,4 @@ def mark_request_paid(request_id):
         connection.commit()
     finally:
         connection.close()
+

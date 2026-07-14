@@ -122,6 +122,33 @@ def create_tables():
                     FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE
                 )
             """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS group_sessions (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    mentor_id INT NOT NULL,
+                    title VARCHAR(150) NOT NULL,
+                    description TEXT,
+                    skill_id INT,
+                    capacity INT NOT NULL DEFAULT 5,
+                    scheduled_at DATETIME,
+                    status VARCHAR(20) NOT NULL DEFAULT 'open',
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (mentor_id) REFERENCES users(id) ON DELETE CASCADE,
+                    FOREIGN KEY (skill_id) REFERENCES skills(id) ON DELETE SET NULL
+                )
+            """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS group_participants (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    group_session_id INT NOT NULL,
+                    learner_id INT NOT NULL,
+                    joined_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (group_session_id) REFERENCES group_sessions(id) ON DELETE CASCADE,
+                    FOREIGN KEY (learner_id) REFERENCES users(id) ON DELETE CASCADE,
+                    UNIQUE KEY unique_participant (group_session_id, learner_id)
+                )
+            """)
         connection.commit()
     finally:
         connection.close()

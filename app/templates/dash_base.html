@@ -46,12 +46,18 @@
                     <a href="{{ url_for('mentor.mentor_profile') }}" class="menu-item {{ 'active' if active == 'mentor_profile' }}">
                         <i class="fa-solid fa-id-badge"></i> Mentor profile
                     </a>
+                    <a href="{{ url_for('group.my_group_sessions') }}" class="menu-item {{ 'active' if active == 'groups' }}">
+                        <i class="fa-solid fa-users"></i> Group sessions
+                    </a>
                 {% else %}
                     <a href="{{ url_for('browse.browse') }}" class="menu-item {{ 'active' if active == 'browse' }}">
                         <i class="fa-solid fa-magnifying-glass"></i> Browse mentors
                     </a>
                     <a href="{{ url_for('session.my_requests') }}" class="menu-item {{ 'active' if active == 'bookings' }}">
                         <i class="fa-solid fa-bookmark"></i> My requests
+                    </a>
+                    <a href="{{ url_for('group.group_list') }}" class="menu-item {{ 'active' if active == 'groups' }}">
+                        <i class="fa-solid fa-users"></i> Group sessions
                     </a>
                 {% endif %}
 
