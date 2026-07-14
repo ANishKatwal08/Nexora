@@ -205,57 +205,7 @@ def remove_mentor_skill(mentor_id, skill_id):
         connection.close()
 
 
-def update_profession(user_id, profession):
-    """Set a mentor's profession title."""
-    connection = get_connection()
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(
-                "UPDATE users SET profession = %s WHERE id = %s",
-                (profession, user_id),
-            )
-        connection.commit()
-    finally:
-        connection.close()
 
-def find_mentors_by_skill(skill_id):
-    """Return all mentors who teach a given skill."""
-    connection = get_connection()
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(
-                """
-                SELECT u.id, u.name, u.username, u.profession, u.bio, u.avatar_url
-                FROM users u
-                JOIN mentor_skills ms ON u.id = ms.mentor_id
-                WHERE ms.skill_id = %s
-                  AND u.role = 'mentor'
-                  AND u.is_active = TRUE
-                ORDER BY u.name
-                """,
-                (skill_id,),
-            )
-            return cursor.fetchall()
-    finally:
-        connection.close()
-
-
-def get_all_mentors():
-    """Return all active mentors, for browsing without a filter."""
-    connection = get_connection()
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(
-                """
-                SELECT id, name, username, profession, bio, avatar_url
-                FROM users
-                WHERE role = 'mentor' AND is_active = TRUE
-                ORDER BY name
-                """
-            )
-            return cursor.fetchall()
-    finally:
-        connection.close()
 
 def get_all_mentors(sort="rating"):
     """Return all active mentors, sorted by rating or name."""
@@ -523,19 +473,6 @@ def get_conversation_partners(user_id):
                 (user_id, user_id, user_id),
             )
             return cursor.fetchall()
-    finally:
-        connection.close()
-
-def get_unread_message_count(user_id):
-    """Count messages sent to this user that are unread."""
-    connection = get_connection()
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(
-                "SELECT COUNT(*) AS c FROM messages WHERE recipient_id = %s AND is_read = FALSE",
-                (user_id,),
-            )
-            return cursor.fetchone()["c"]
     finally:
         connection.close()
 
