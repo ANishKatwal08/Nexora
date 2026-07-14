@@ -91,3 +91,74 @@ def leave_feedback(request_id):
     user_repo.create_feedback(request_id, session["user_id"], req["mentor_id"], int(rating), comment)
     flash("Thanks for your review.", "success")
     return redirect(url_for("session.my_requests"))
+
+@login_required
+def cancel_request(request_id):
+    if session.get("user_role") != "learner":
+        return redirect(url_for("dashboard.dashboard"))
+
+    req = user_repo.get_request_by_id(request_id)
+    if not req or req["learner_id"] != session["user_id"]:
+        flash("That request was not found.", "danger")
+        return redirect(url_for("session.my_requests"))
+
+    if req["status"] != "pending":
+        flash("You can only cancel a request that is still pending.", "danger")
+        return redirect(url_for("session.my_requests"))
+
+    user_repo.delete_session_request(request_id)
+    flash("Your request was cancelled.", "success")
+    return redirect(url_for("session.my_requests"))
+
+@login_required
+def edit_feedback(request_id):
+    if session.get("user_role") != "learner":
+        return redirect(url_for("dashboard.dashboard"))
+
+    fb = user_repo.get_feedback_for_request(request_id)
+    if not fb or fb["learner_id"] != session["user_id"]:
+        flash("You can only edit your own review.", "danger")
+        return redirect(url_for("session.my_requests"))
+
+    rating = request.form.get("rating")
+    comment = request.form.get("comment", "").strip()
+    if not rating or not rating.isdigit() or int(rating) < 1 or int(rating) > 5:
+        flash("Please give a rating between 1 and 5.", "danger")
+        return redirect(url_for("session.my_requests"))
+
+    user_repo.update_feedback(request_id, int(rating), comment)
+    flash("Your review was updated.", "success")
+    return redirect(url_for("session.my_requests"))
+
+
+@login_required
+def remove_feedback(request_id):
+    if session.get("user_role") != "learner":
+        return redirect(url_for("dashboard.dashboard"))
+
+    fb = user_repo.get_feedback_for_request(request_id)
+    if not fb or fb["learner_id"] != session["user_id"]:
+        flash("You can only delete your own review.", "danger")
+        return redirect(url_for("session.my_requests"))
+
+    user_repo.delete_feedback(request_id)
+    flash("Your review was removed.", "success")
+    return redirect(url_for("session.my_requests"))
+
+@login_required
+def mark_paid(request_id):
+    if session.get("user_role") != "learner":
+        return redirect(url_for("dashboard.dashboard"))
+
+    req = user_repo.get_request_by_id(request_id)
+    if not req or req["learner_id"] != session["user_id"]:
+        flash("That request was not found.", "danger")
+        return redirect(url_for("session.my_requests"))
+
+    if req["status"] != "confirmed":
+        flash("You can only pay for a confirmed session.", "danger")
+        return redirect(url_for("session.my_requests"))
+
+    user_repo.mark_request_paid(request_id)
+    flash("Payment recorded. This is a simulated payment, no real money was charged.", "success")
+    return redirect(url_for("session.my_requests"))

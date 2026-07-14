@@ -249,7 +249,7 @@ def get_requests_for_learner(learner_id):
         with connection.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT sr.*, u.name AS mentor_name, s.name AS skill_name
+                SELECT sr.*, u.name AS mentor_name, u.hourly_rate AS mentor_rate, s.name AS skill_name
                 FROM session_requests sr
                 JOIN users u ON sr.mentor_id = u.id
                 LEFT JOIN skills s ON sr.skill_id = s.id
@@ -564,6 +564,100 @@ def set_user_active(user_id, active):
             cursor.execute(
                 "UPDATE users SET is_active = %s WHERE id = %s",
                 (active, user_id),
+            )
+        connection.commit()
+    finally:
+        connection.close()
+
+def delete_session_request(request_id):
+    """Delete a session request (used when a learner cancels a pending request)."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("DELETE FROM session_requests WHERE id = %s", (request_id,))
+        connection.commit()
+    finally:
+        connection.close()
+
+
+def update_feedback(request_id, rating, comment):
+    """Edit an existing review, then refresh the mentor's average rating."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE feedback SET rating = %s, comment = %s WHERE request_id = %s",
+                (rating, comment, request_id),
+            )
+            cursor.execute(
+                "SELECT mentor_id FROM feedback WHERE request_id = %s", (request_id,)
+            )
+            row = cursor.fetchone()
+            if row:
+                mentor_id = row["mentor_id"]
+                cursor.execute(
+                    "SELECT AVG(rating) AS avg_rating FROM feedback WHERE mentor_id = %s",
+                    (mentor_id,),
+                )
+                avg = cursor.fetchone()["avg_rating"]
+                cursor.execute(
+                    "UPDATE users SET rating = %s WHERE id = %s",
+                    (round(avg, 1) if avg is not None else 0.0, mentor_id),
+                )
+        connection.commit()
+    finally:
+        connection.close()
+
+
+def delete_feedback(request_id):
+    """Delete a review, then refresh the mentor's average rating."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT mentor_id FROM feedback WHERE request_id = %s", (request_id,)
+            )
+            row = cursor.fetchone()
+            mentor_id = row["mentor_id"] if row else None
+
+            cursor.execute("DELETE FROM feedback WHERE request_id = %s", (request_id,))
+
+            if mentor_id:
+                cursor.execute(
+                    "SELECT AVG(rating) AS avg_rating FROM feedback WHERE mentor_id = %s",
+                    (mentor_id,),
+                )
+                avg = cursor.fetchone()["avg_rating"]
+                cursor.execute(
+                    "UPDATE users SET rating = %s WHERE id = %s",
+                    (round(avg, 1) if avg is not None else 0.0, mentor_id),
+                )
+        connection.commit()
+    finally:
+        connection.close()
+
+
+def delete_message(message_id, user_id):
+    """Delete a message, only if it belongs to the given user (the sender)."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "DELETE FROM messages WHERE id = %s AND sender_id = %s",
+                (message_id, user_id),
+            )
+        connection.commit()
+    finally:
+        connection.close()
+
+def mark_request_paid(request_id):
+    """Mark a session request as paid (simulated payment, no real money)."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE session_requests SET payment_status = 'paid' WHERE id = %s",
+                (request_id,),
             )
         connection.commit()
     finally:

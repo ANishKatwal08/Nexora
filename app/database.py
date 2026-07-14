@@ -85,6 +85,7 @@ def create_tables():
                     skill_id INT,
                     note TEXT,
                     status VARCHAR(20) NOT NULL DEFAULT 'pending',
+                    payment_status VARCHAR(20) DEFAULT 'unpaid',
                     scheduled_at DATETIME,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (learner_id) REFERENCES users(id) ON DELETE CASCADE,

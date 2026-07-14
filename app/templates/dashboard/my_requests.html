@@ -24,19 +24,41 @@
                     <span class="req-status status-{{ req.status }}">{{ req.status|capitalize }}</span>
                 </div>
 
-                {% if req.status == 'confirmed' %}
+                {% if req.status == 'pending' %}
+                    <div class="req-actions">
+                        <form method="POST" action="{{ url_for('session.cancel_request', request_id=req.id) }}" onsubmit="return confirm('Cancel this request?');">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn-outline-msg">Cancel request</button>
+                        </form>
+                    </div>
+                {% elif req.status == 'confirmed' %}
                     <div class="req-actions">
                         <a href="{{ url_for('message.conversation', other_id=req.mentor_id) }}" class="btn-outline-msg">Message {{ req.mentor_name }}</a>
+                        {% if req.mentor_rate %}
+                            {% if req.payment_status == 'paid' %}
+                                <span class="req-status status-confirmed">Paid &#36;{{ req.mentor_rate }}</span>
+                            {% else %}
+                                <form method="POST" action="{{ url_for('session.mark_paid', request_id=req.id) }}" onsubmit="return confirm('This is a simulated payment of $' + {{ req.mentor_rate }} + '. No real money is charged. Continue?');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn">Pay &#36;{{ req.mentor_rate }} (simulated)</button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
                     </div>
                 {% elif req.status == 'completed' %}
                     {% if req.feedback %}
                         <div class="req-actions">
                             <span class="req-status status-confirmed">You rated {{ req.feedback.rating }} / 5</span>
+                            <button type="button" class="btn-outline-msg" onclick="openReview({{ req.id }}, '{{ req.mentor_name|e }}', {{ req.feedback.rating }}, '{{ req.feedback.comment|e if req.feedback.comment else '' }}')">Edit review</button>
+                            <form method="POST" action="{{ url_for('session.remove_feedback', request_id=req.id) }}" onsubmit="return confirm('Delete your review?');">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn-outline-msg">Delete review</button>
+                            </form>
                         </div>
                     {% else %}
                         <div class="req-actions">
                             <a href="{{ url_for('message.conversation', other_id=req.mentor_id) }}" class="btn-outline-msg">Message {{ req.mentor_name }}</a>
-                            <button type="button" class="btn" onclick="openReview({{ req.id }}, '{{ req.mentor_name|e }}')">Leave a review</button>
+                            <button type="button" class="btn" onclick="openReview({{ req.id }}, '{{ req.mentor_name|e }}', 0, '')">Leave a review</button>
                         </div>
                     {% endif %}
                 {% endif %}
@@ -78,13 +100,34 @@
     const modal = document.getElementById('reviewModal');
     const form = document.getElementById('reviewForm');
     const ratingValue = document.getElementById('ratingValue');
+    const commentBox = form.querySelector('textarea[name="comment"]');
+    const submitBtn = form.querySelector('.review-submit');
+    const modalTitle = document.querySelector('.review-modal h3');
     const stars = document.querySelectorAll('.star-pick');
 
-    function openReview(requestId, mentorName) {
-        form.action = '/session/feedback/' + requestId;
+    function paintStars(val) {
+        stars.forEach(function (s) {
+            s.classList.toggle('filled', parseInt(s.dataset.value, 10) <= val);
+        });
+    }
+
+    function openReview(requestId, mentorName, existingRating, existingComment) {
+        existingRating = existingRating || 0;
+        if (existingRating > 0) {
+            // editing an existing review
+            form.action = '/session/feedback/' + requestId + '/edit';
+            modalTitle.textContent = 'Edit your review';
+            submitBtn.textContent = 'Update review';
+        } else {
+            // new review
+            form.action = '/session/feedback/' + requestId;
+            modalTitle.textContent = 'Rate your session';
+            submitBtn.textContent = 'Submit review';
+        }
         document.getElementById('reviewMentorName').textContent = 'How was your session with ' + mentorName + '?';
-        ratingValue.value = '';
-        stars.forEach(s => s.classList.remove('filled'));
+        ratingValue.value = existingRating > 0 ? existingRating : '';
+        commentBox.value = existingComment || '';
+        paintStars(existingRating);
         modal.classList.add('open');
     }
 
@@ -96,9 +139,7 @@
         star.addEventListener('click', function () {
             const val = parseInt(star.dataset.value, 10);
             ratingValue.value = val;
-            stars.forEach(function (s) {
-                s.classList.toggle('filled', parseInt(s.dataset.value, 10) <= val);
-            });
+            paintStars(val);
         });
         star.addEventListener('mouseenter', function () {
             const val = parseInt(star.dataset.value, 10);

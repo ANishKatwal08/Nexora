@@ -12,6 +12,13 @@
                 <div class="chat-bubble {{ 'mine' if m.sender_id == session.get('user_id') else 'theirs' }}">
                     <p>{{ m.body }}</p>
                     <span class="chat-time">{{ m.created_at.strftime('%b %d, %H:%M') }}</span>
+                    {% if m.sender_id == session.get('user_id') %}
+                        <form method="POST" action="{{ url_for('message.remove_message', message_id=m.id) }}" class="msg-delete-form" onsubmit="return confirm('Delete this message?');">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="other_id" value="{{ other.id }}">
+                            <button type="submit" class="msg-delete" aria-label="Delete message">&times;</button>
+                        </form>
+                    {% endif %}
                 </div>
             {% endfor %}
         {% else %}

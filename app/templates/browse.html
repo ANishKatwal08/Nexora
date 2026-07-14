@@ -12,6 +12,9 @@
 
 <div class="browse-hero">
     <div class="container">
+        {% if session.get('user_id') %}
+            <a href="{{ url_for('dashboard.dashboard') }}" class="browse-back">&larr; Back to dashboard</a>
+        {% endif %}
         <h1>Find your mentor</h1>
         <p>Browse {{ mentors|length }} mentors across every skill and connect with someone who can teach you.</p>
     </div>
