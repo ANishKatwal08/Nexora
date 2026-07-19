@@ -857,3 +857,8 @@ a:hover { text-decoration: underline; }
 
 .mentor-name a { color: inherit; }
 .mentor-name a:hover { color: var(--accent); text-decoration: none; }
+
+.error-wrap { min-height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px 20px; }
+.error-code { font-size: 72px; font-weight: 700; color: #cddce3; margin: 0; line-height: 1; font-family: "Playfair Display", serif; }
+.error-title { font-size: 28px; color: #142430; margin: 12px 0; font-family: "Playfair Display", serif; }
+.error-text { color: #5a6b74; margin-bottom: 24px; }

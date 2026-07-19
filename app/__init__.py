@@ -1,6 +1,7 @@
 from flask import Flask, render_template, session, request, abort
 from config import Config
 from app.database import create_tables, seed_skills
+from flask import Flask, render_template
 import secrets
 import os
 
@@ -112,3 +113,11 @@ def create_app():
         return render_template("home.html")
 
     return app
+
+    @app.errorhandler(404)
+    def not_found(error):
+        return render_template("errors/404.html"), 404
+
+    @app.errorhandler(500)
+    def server_error(error):
+        return render_template("errors/500.html"), 500
