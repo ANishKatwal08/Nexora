@@ -1,6 +1,6 @@
 from app.database import get_connection
 from datetime import datetime, timedelta
-import random
+import secrets
 
 
 def create_user(name, username, email, phone, password_hash, role):
@@ -58,7 +58,7 @@ def get_user_by_identifier(identifier):
         connection.close()
 def create_login_code(user_id):
     """Generate a 6 digit code for this user, store it with a 10 minute expiry, return the code."""
-    code = "{:06d}".format(random.randint(0, 999999))
+    code = "{:06d}".format(secrets.randbelow(1000000))
     expires_at = datetime.now() + timedelta(minutes=10)
 
     connection = get_connection()
@@ -209,18 +209,27 @@ def remove_mentor_skill(mentor_id, skill_id):
 
 def get_all_mentors(sort="rating"):
     """Return all active mentors, sorted by rating or name."""
-    order = "rating DESC, name ASC" if sort == "rating" else "name ASC"
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
-            cursor.execute(
-                f"""
-                SELECT id, name, username, profession, bio, avatar_url, rating
-                FROM users
-                WHERE role = 'mentor' AND is_active = TRUE
-                ORDER BY {order}
-                """
-            )
+            if sort == "rating":
+                cursor.execute(
+                    """
+                    SELECT id, name, username, profession, bio, avatar_url, rating
+                    FROM users
+                    WHERE role = 'mentor' AND is_active = TRUE
+                    ORDER BY rating DESC, name ASC
+                    """
+                )
+            else:
+                cursor.execute(
+                    """
+                    SELECT id, name, username, profession, bio, avatar_url, rating
+                    FROM users
+                    WHERE role = 'mentor' AND is_active = TRUE
+                    ORDER BY name ASC
+                    """
+                )
             return cursor.fetchall()
     finally:
         connection.close()
@@ -662,4 +671,3 @@ def mark_request_paid(request_id):
         connection.commit()
     finally:
         connection.close()
-
