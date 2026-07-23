@@ -15,6 +15,12 @@
 
     <p class="group-count" style="margin-top:14px;">{{ group.joined_count }} / {{ group.capacity }} learners joined</p>
 
+    {% if is_member %}
+        <p style="margin-top:14px;">
+            <a href="{{ url_for('group.group_chat', session_id=group.id) }}" class="btn-dash">Open group chat</a>
+        </p>
+    {% endif %}
+
     {% if session.get('user_role') == 'learner' %}
         <div class="req-actions" style="margin-top:16px;">
             {% if joined %}

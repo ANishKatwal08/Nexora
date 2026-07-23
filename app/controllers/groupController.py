@@ -58,9 +58,11 @@ def group_detail(session_id):
     participants = group_repo.get_participants(session_id)
     joined = group_repo.has_joined(session_id, session.get("user_id"))
     is_full = group["joined_count"] >= group["capacity"]
+    is_member = group_repo.is_group_member(session_id, session.get("user_id"))
     return render_template(
         "dashboard/group_detail.html",
         group=group, participants=participants, joined=joined, is_full=is_full,
+        is_member=is_member,
     )
 
 
@@ -98,3 +100,55 @@ def remove_group(session_id):
     group_repo.delete_group_session(session_id, session["user_id"])
     flash("Group session deleted.", "success")
     return redirect(url_for("group.my_group_sessions"))
+
+@login_required
+def group_chat(session_id):
+    """The chat room for one group session. Members only."""
+    group = group_repo.get_group_session_by_id(session_id)
+    if not group:
+        abort(404)
+
+    # Only the host mentor and the learners who joined may see this chat.
+    # Checked on the server, not just hidden in the interface.
+    if not group_repo.is_group_member(session_id, session.get("user_id")):
+        abort(403)
+
+    messages = group_repo.get_group_messages(session_id)
+    participants = group_repo.get_participants(session_id)
+    return render_template(
+        "dashboard/group_chat.html",
+        group=group, messages=messages, participants=participants,
+    )
+
+
+@login_required
+def post_group_message(session_id):
+    """Post a message to a group session's chat. Members only."""
+    group = group_repo.get_group_session_by_id(session_id)
+    if not group:
+        abort(404)
+
+    if not group_repo.is_group_member(session_id, session.get("user_id")):
+        abort(403)
+
+    body = request.form.get("body", "").strip()
+    if not body:
+        flash("Write something before sending.", "danger")
+        return redirect(url_for("group.group_chat", session_id=session_id))
+    if len(body) > 2000:
+        flash("That message is too long.", "danger")
+        return redirect(url_for("group.group_chat", session_id=session_id))
+
+    group_repo.send_group_message(session_id, session["user_id"], body)
+    return redirect(url_for("group.group_chat", session_id=session_id))
+
+
+@login_required
+def remove_group_message(session_id, message_id):
+    """Delete one of your own messages from a group chat."""
+    if not group_repo.is_group_member(session_id, session.get("user_id")):
+        abort(403)
+
+    group_repo.delete_group_message(message_id, session_id, session["user_id"])
+    flash("Message deleted.", "success")
+    return redirect(url_for("group.group_chat", session_id=session_id))

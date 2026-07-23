@@ -12,6 +12,9 @@ def register_routes():
     bp.add_url_rule("/groups/<int:session_id>/join", view_func=groupController.join_group, methods=["POST"])
     bp.add_url_rule("/groups/<int:session_id>/leave", view_func=groupController.leave_group, methods=["POST"])
     bp.add_url_rule("/groups/<int:session_id>/delete", view_func=groupController.remove_group, methods=["POST"])
+    bp.add_url_rule("/groups/<int:session_id>/chat", view_func=groupController.group_chat, methods=["GET"])
+    bp.add_url_rule("/groups/<int:session_id>/chat/send", view_func=groupController.post_group_message, methods=["POST"])
+    bp.add_url_rule("/groups/<int:session_id>/chat/<int:message_id>/delete", view_func=groupController.remove_group_message, methods=["POST"])
 
 
 register_routes()

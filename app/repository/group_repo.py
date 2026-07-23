@@ -159,3 +159,84 @@ def delete_group_session(session_id, mentor_id):
         connection.commit()
     finally:
         connection.close()
+
+def is_group_member(session_id, user_id):
+    """True if this user is the mentor who hosts the session, or a learner who joined it.
+
+    This is the access check for the group chat. It is deliberately kept in one
+    place so that both reading and posting messages use the same rule.
+    """
+    if not user_id:
+        return False
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT 1 AS ok FROM group_sessions
+                WHERE id = %s AND mentor_id = %s
+                UNION
+                SELECT 1 AS ok FROM group_participants
+                WHERE group_session_id = %s AND learner_id = %s
+                LIMIT 1
+                """,
+                (session_id, user_id, session_id, user_id),
+            )
+            return cursor.fetchone() is not None
+    finally:
+        connection.close()
+
+
+def get_group_messages(session_id):
+    """Return every message in a group session's chat, oldest first."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT gm.id, gm.body, gm.created_at, gm.sender_id,
+                       u.name AS sender_name, u.role AS sender_role
+                FROM group_messages gm
+                JOIN users u ON gm.sender_id = u.id
+                WHERE gm.group_session_id = %s
+                ORDER BY gm.created_at ASC, gm.id ASC
+                """,
+                (session_id,),
+            )
+            return cursor.fetchall()
+    finally:
+        connection.close()
+
+
+def send_group_message(session_id, sender_id, body):
+    """Store a message in a group session's chat."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO group_messages (group_session_id, sender_id, body)
+                VALUES (%s, %s, %s)
+                """,
+                (session_id, sender_id, body),
+            )
+        connection.commit()
+    finally:
+        connection.close()
+
+
+def delete_group_message(message_id, session_id, user_id):
+    """Delete a group message, only if it belongs to this user and this session."""
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                DELETE FROM group_messages
+                WHERE id = %s AND group_session_id = %s AND sender_id = %s
+                """,
+                (message_id, session_id, user_id),
+            )
+        connection.commit()
+    finally:
+        connection.close()

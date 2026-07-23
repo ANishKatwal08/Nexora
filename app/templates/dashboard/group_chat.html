@@ -1,0 +1,75 @@
+{% extends "dash_base.html" %}
+{% set active = 'groups' %}
+
+{% block title %}{{ group.title }} chat{% endblock %}
+{% block page_title %}Group chat{% endblock %}
+
+{% block dash_content %}
+<div class="card">
+    <div class="card-header">
+        <h3>{{ group.title }}</h3>
+        <a href="{{ url_for('group.group_detail', session_id=group.id) }}" class="view-link">Back to session</a>
+    </div>
+    <p class="group-host">Hosted by {{ group.mentor_name }}</p>
+    <p class="group-count" style="margin-top:8px;">
+        Private to the {{ participants|length + 1 }} people in this session
+    </p>
+</div>
+
+<div class="card">
+    <div class="card-header"><h3>Messages</h3></div>
+
+    {% if messages %}
+        <div class="group-chat-log">
+            {% for m in messages %}
+                <div class="group-msg {% if m.sender_id == session.get('user_id') %}is-mine{% endif %}">
+                    <div class="group-msg-head">
+                        <span class="group-msg-author">
+                            {{ m.sender_name }}
+                            {% if m.sender_id == group.mentor_id %}
+                                <span class="group-badge">host</span>
+                            {% endif %}
+                        </span>
+                        <span class="group-msg-time">{{ m.created_at }}</span>
+                    </div>
+                    <p class="group-msg-body">{{ m.body }}</p>
+                    {% if m.sender_id == session.get('user_id') %}
+                        <form method="POST"
+                              action="{{ url_for('group.remove_group_message', session_id=group.id, message_id=m.id) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn-link-danger">Delete</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="dash-empty">No messages yet. Start the conversation.</p>
+    {% endif %}
+
+    <form method="POST"
+          action="{{ url_for('group.post_group_message', session_id=group.id) }}"
+          class="group-chat-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <textarea name="body" rows="3" maxlength="2000"
+                  placeholder="Write a message to the group" required></textarea>
+        <button type="submit" class="btn-dash">Send</button>
+    </form>
+</div>
+
+<div class="card">
+    <div class="card-header"><h3>In this chat ({{ participants|length + 1 }})</h3></div>
+    <div class="participant-list">
+        <div class="participant">
+            <div class="participant-avatar">{{ group.mentor_name[0]|upper }}</div>
+            <span>{{ group.mentor_name }} <span class="group-badge">host</span></span>
+        </div>
+        {% for p in participants %}
+            <div class="participant">
+                <div class="participant-avatar">{{ p.name[0]|upper }}</div>
+                <span>{{ p.name }}</span>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
